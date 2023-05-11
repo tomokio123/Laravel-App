@@ -17,7 +17,8 @@ class AuthenticatedSessionController extends Controller
      */
     public function create()
     {
-        return view('auth.login');
+        return view('auth.login');//「ビューファイルに渡す」の意味になっている。
+        //そのビューファイルはresources/views/フォルダにあるauth/loginにある。ってこと
     }
 
     /**

@@ -1,5 +1,5 @@
 <?php
-
+//コントローラを読み込んでいる
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\ConfirmablePasswordController;
 use App\Http\Controllers\Auth\EmailVerificationNotificationController;
@@ -8,9 +8,10 @@ use App\Http\Controllers\Auth\NewPasswordController;
 use App\Http\Controllers\Auth\PasswordResetLinkController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\Auth\VerifyEmailController;
-use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Route;//ルーティングの機能を使うためにimportしている
 
 Route::middleware('guest')->group(function () {
+    //Route::get or post()と書く。(URL, [コントローラー名, コントローラー内のメソッド名])の順で書く
     Route::get('register', [RegisteredUserController::class, 'create'])
                 ->name('register');
 

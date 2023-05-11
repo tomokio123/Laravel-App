@@ -13,6 +13,8 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+//Route::get or post()と書き、(URL, [コントローラー名, コントローラー内のメソッド名])の順で書く
+
 Route::get('/', function () {
     return view('welcome');
 });
@@ -20,5 +22,9 @@ Route::get('/', function () {
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth'])->name('dashboard');
+//->middleware(['auth'])認証していたら」ってこと
+//middleware(['quest'])は、「まだログインしていない」って意味
+//name('register'); などとすることで、名前付きルートを作ることができる。
 
-require __DIR__.'/auth.php';
+require __DIR__.'/auth.php';//__DIR__＝「現在のディレクトリ」ってこと。
+///auth.php
