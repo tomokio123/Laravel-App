@@ -2,4 +2,5 @@
   <div>{{ $title }}</div><!-- component側で変数を設定し($title等)、blade側で取り出す-->
   <div>画像</div>
   <div>{{ $content }}</div>
+  <div>{{ $message }}</div>
 </div>
