@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ComponentTestController;
 
 /*
 |--------------------------------------------------------------------------
@@ -25,6 +26,8 @@ Route::get('/dashboard', function () {
 //->middleware(['auth'])認証していたら」ってこと
 //middleware(['quest'])は、「まだログインしていない」って意味
 //name('register'); などとすることで、名前付きルートを作ることができる。
+Route::get('/component-test1', [ComponentTestController::class, 'showComponent1']);//showComponent1はメソッド名
+Route::get('/component-test2', [ComponentTestController::class, 'showComponent2']);
 
 require __DIR__.'/auth.php';//__DIR__＝「現在のディレクトリ」ってこと。
 ///auth.php
