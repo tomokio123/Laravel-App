@@ -14,5 +14,7 @@ class GuestLayout extends Component
     public function render()
     {
         return view('layouts.guest');
+        //このビュー(layouts.guest)を呼び出すように指定している。どこにあるかというと
+        //resources/views/layouts/guest.blade.phpファイルにある。
     }
 }

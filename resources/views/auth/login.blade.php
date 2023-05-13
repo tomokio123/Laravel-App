@@ -1,9 +1,12 @@
-<x-guest-layout>
-    <!-- 最初のログイン画面 -->
+<x-guest-layout> <!--  guest-layoutはapp/View/Components にあり、それを呼び出している。-->
+    <!-- 最近laravelがテンプレート継承(required)から「コンポーネント」に変更した。ControllerとViewの分離の為である。-->
+    <!-- 「x-コンポーネント名」で表す。例えば、4行目の<x-auth-card>ならば 、
+    resources/views/component の中にある「auth-card」ファイルを指す。--> 
+    <!-- 最初に呼ばれる-->
     <x-auth-card>
         <x-slot name="logo">
             <a href="/">
-                <x-application-logo class="w-20 h-20 fill-current text-gray-500" />
+                <x-application-logo class="w-20 h-20 fill-current text-pink-400" />
             </a>
         </x-slot>
 

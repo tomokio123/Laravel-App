@@ -20,7 +20,7 @@
     </head>
     <body>
         <div class="font-sans text-gray-900 antialiased">
-            {{ $slot }}
+            {{ $slot }} <!-- slotを使うことで、メインのコンテンツを表示できている -->
         </div>
     </body>
 </html>
