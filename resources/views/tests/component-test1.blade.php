@@ -6,6 +6,11 @@ component-test-1
     /tests/card の "{{$message }}"である。--}}
   {{-- コメント:resources/views/components/tests/card.blade.phpファイルのcomponent側で設定された
     $title,$content(属性)にそれぞれ値を設定している。 --}}
+    {{-- コメント--}}
+
+  <x-tests.card title="タイトルB"/>
+  {{-- こんな感じでcomponent側から渡さないといけない$contentなどを渡していないとエラーが出るので --}}
+  {{-- そんな場合にprops(連想配列形式)で初期値を設定してあげると問題解決できる。(tests/card.blade.php内に記述) --}}
 
 </x-tests.app>
 {{--  <x-tests.app>の始まりのタグは要らないみたいだ？！
