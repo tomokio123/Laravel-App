@@ -558,6 +558,8 @@ video {
   max-width: 72rem;
 }.max-w-7xl {
   max-width: 80rem;
+}.max-w-xl {
+  max-width: 36rem;
 }.flex-1 {
   flex: 1 1 0%;
 }.shrink-0 {
@@ -626,6 +628,8 @@ video {
   border-bottom-width: 2px;
 }.border-l-4 {
   border-left-width: 4px;
+}.border-r {
+  border-right-width: 1px;
 }.border-t {
   border-top-width: 1px;
 }.border-gray-100 {
@@ -637,6 +641,9 @@ video {
 }.border-gray-300 {
   --tw-border-opacity: 1;
   border-color: rgb(209 213 219 / var(--tw-border-opacity));
+}.border-gray-400 {
+  --tw-border-opacity: 1;
+  border-color: rgb(175 181 192 / var(--tw-border-opacity));
 }.border-indigo-400 {
   --tw-border-opacity: 1;
   border-color: rgb(129 140 248 / var(--tw-border-opacity));
@@ -733,6 +740,8 @@ video {
   line-height: 1.75rem;
 }.leading-tight {
   line-height: 1.25;
+}.tracking-wider {
+  letter-spacing: 0.05em;
 }.tracking-widest {
   letter-spacing: 0.1em;
 }.text-gray-200 {
