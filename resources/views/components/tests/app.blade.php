@@ -20,7 +20,7 @@
     </head>
     <body>
       <header>
-        {{ $header }} <!-- 名前付きスロット -->
+        {{ $header }} <!-- 名前付きスロット。ここはcomponent側。resources/views/components/tests/component_test1.blade.php などのblade側でこのheaderにアクセスしている -->
       </header>
         <div class="font-sans text-gray-900 antialiased">
             {{ $slot }} <!-- slotを使うことで、メインのコンテンツを表示できている -->
