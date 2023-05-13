@@ -12,6 +12,10 @@ component-test-1
   {{-- こんな感じでcomponent側から渡さないといけない$contentなどを渡していないとエラーが出るので --}}
   {{-- そんな場合にprops(連想配列形式)で初期値を設定してあげると問題解決できる。(tests/card.blade.php内に記述) --}}
 
+  <x-tests.card title="タイトルCSSを変更したい" class="bg-red-200"/>
+  {{-- class="bg-red-500"これは「class属性の上書き」を意味するのでcard.bladeのclass="border-2 shadow-md w-1/4 p-2が上書きされてしまう。 --}}
+  {{-- 上書きされないようにするにはcard.bladeで{{attribute}}の後ろに「->merge」をつけないといけない --}}
+
 </x-tests.app>
 {{--  <x-tests.app>の始まりのタグは要らないみたいだ？！
 testsフォルダのapp.blade.php を示す。xは「resources/views/components」。
