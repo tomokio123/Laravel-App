@@ -19,6 +19,9 @@
         <script src="{{ asset('js/app.js') }}" defer></script>
     </head>
     <body>
+      <header>
+        {{ $header }} <!-- 名前付きスロット -->
+      </header>
         <div class="font-sans text-gray-900 antialiased">
             {{ $slot }} <!-- slotを使うことで、メインのコンテンツを表示できている -->
         </div>

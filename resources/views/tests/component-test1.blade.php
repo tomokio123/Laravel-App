@@ -1,4 +1,5 @@
 <x-tests.app>
+  <x-slot name="header">header1</x-slot>
 component-test-1
 </x-tests.app>
 {{--  <x-tests.app>の始まりのタグは要らないみたいだ？！

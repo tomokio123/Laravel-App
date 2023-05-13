@@ -2,7 +2,7 @@
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
             {{ __('Dashboard') }}
-        </h2>
+        </h2><!-- layouts/app.blade.php の{{ header }}ところ -->
     </x-slot>
 
     <div class="py-12">
