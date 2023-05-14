@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ComponentTestController;
+use App\Http\Controllers\LifeCycleTestController;
 
 /*
 |--------------------------------------------------------------------------
@@ -28,6 +29,7 @@ Route::get('/dashboard', function () {
 //name('register'); などとすることで、名前付きルートを作ることができる。
 Route::get('/component-test1', [ComponentTestController::class, 'showComponent1']);//showComponent1はメソッド名
 Route::get('/component-test2', [ComponentTestController::class, 'showComponent2']);
+Route::get('/servicecontainertest', [LifeCycleTestController::class, 'showServiceContainerTest']);
 
 require __DIR__.'/auth.php';//__DIR__＝「現在のディレクトリ」ってこと。
 ///auth.php

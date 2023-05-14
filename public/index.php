@@ -1,5 +1,5 @@
 <?php
-
+//いわゆる「エントリーポイント」
 use Illuminate\Contracts\Http\Kernel;
 use Illuminate\Http\Request;
 
@@ -31,7 +31,8 @@ if (file_exists($maintenance = __DIR__.'/../storage/framework/maintenance.php'))
 |
 */
 
-require __DIR__.'/../vendor/autoload.php';//クラスをすべて読み込む
+require __DIR__.'/../vendor/autoload.php';
+//クラスをすべて読み込む。requireなしで別ファイルのクラスを利用可能
 
 /*
 |--------------------------------------------------------------------------

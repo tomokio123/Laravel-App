@@ -23,10 +23,13 @@ switch ($width) {
 
 <div class="relative" x-data="{ open: false }" @click.outside="open = false" @close.stop="open = false">
     <div @click="open = ! open">
+    {{-- <div @click="open = ! open"> = 「openの反対側に切り替える」という意味。true->false/false->trueといった塩梅 --}}
+    <!-- x-dataはAlphineJS -->
         {{ $trigger }}
     </div>
 
-    <div x-show="open"
+
+    <div x-show="open" {{-- 「x-showが"open"の時、実行って意味」 --}}
             x-transition:enter="transition ease-out duration-200"
             x-transition:enter-start="transform opacity-0 scale-95"
             x-transition:enter-end="transform opacity-100 scale-100"
