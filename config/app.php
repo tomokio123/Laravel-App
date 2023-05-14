@@ -177,6 +177,9 @@ return [
 
         //SampleServiceProviderの場所を記述することで初めてSampleServiceProvider.phpが回る。
         App\Providers\SampleServiceProvider::class,
+        //①：SampleServiceProviderなどのサービスプロバイダファイルを作成する
+        //②：config/app.php の中に上記のように記述することで「Service Container」に「サービスプロバイダ」として登録される。
+        //③：LifeCycleTestControllerなどではService Containerが使用できるので、①のSampleServiceProviderもこの中で使用可能になる
     ],
 
     /*
