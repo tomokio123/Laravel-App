@@ -6,6 +6,17 @@ use Illuminate\Http\Request;
 
 class LifeCycleTestController extends Controller
 {
+    public function showServiceProviderTest(){
+        $encrypt = app()->make("encrypter");
+        $password = $encrypt->encrypt("password");
+
+        $sample = app()->make("serviceProviderTest");
+        //"serviceProviderTest"というキーワードで登録されているはずなのでそれを取ってきて$sampleに格納
+        //ちなみに登録はSampleServiceProvider.phpの
+        //register()メソッド内で「->bind("serviceProviderTest", function(){}」として登録している。
+        dd($sample, $password, $encrypt->decrypt($password));
+    }
+
     //showServiceContainerTestメソッド
     public function showServiceContainerTest(){
         //Containerに「登録」するには「->bind」を利用する。

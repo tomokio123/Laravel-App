@@ -175,6 +175,8 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
 
+        //SampleServiceProviderの場所を記述することで初めてSampleServiceProvider.phpが回る。
+        App\Providers\SampleServiceProvider::class,
     ],
 
     /*
