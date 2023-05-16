@@ -1,14 +1,40 @@
 <?php
+
 //コントローラを読み込んでいる
-use App\Http\Controllers\User\Auth\AuthenticatedSessionController;
-use App\Http\Controllers\User\Auth\ConfirmablePasswordController;
-use App\Http\Controllers\User\Auth\EmailVerificationNotificationController;
-use App\Http\Controllers\User\Auth\EmailVerificationPromptController;
-use App\Http\Controllers\User\Auth\NewPasswordController;
-use App\Http\Controllers\User\Auth\PasswordResetLinkController;
-use App\Http\Controllers\User\Auth\RegisteredUserController;
-use App\Http\Controllers\User\Auth\VerifyEmailController;
+use App\Http\Controllers\Owner\Auth\AuthenticatedSessionController;
+use App\Http\Controllers\Owner\Auth\ConfirmablePasswordController;
+use App\Http\Controllers\Owner\Auth\EmailVerificationNotificationController;
+use App\Http\Controllers\Owner\Auth\EmailVerificationPromptController;
+use App\Http\Controllers\Owner\Auth\NewPasswordController;
+use App\Http\Controllers\Owner\Auth\PasswordResetLinkController;
+use App\Http\Controllers\Owner\Auth\RegisteredUserController;
+use App\Http\Controllers\Owner\Auth\VerifyEmailController;
 use Illuminate\Support\Facades\Route;//ルーティングの機能を使うためにimportしている
+
+/*
+|--------------------------------------------------------------------------
+| Web Routes
+|--------------------------------------------------------------------------
+|
+| Here is where you can register web routes for your application. These
+| routes are loaded by the RouteServiceProvider within a group which
+| contains the "web" middleware group. Now create something great!
+|
+*/
+
+//Route::get or post()と書き、(URL, [コントローラー名, コントローラー内のメソッド名])の順で書く
+
+Route::get('/', function () {
+    return view('owner.welcome');
+});
+
+//laravel breezeを入れると以下の/dashboardルートが生成される
+//ログインした時に以下の/dashboardにリダイレクトがかかる
+Route::get('/dashboard', function () {
+    return view('owner.dashboard');
+})->middleware(['auth:owners'])->name('dashboard');
+//ガード「auth:owners」として、ミドルウエアに追加。「オーナー権限を持っていたら」てこと
+//config/auth.phpの記述に基づいてミスなく書く。(auth:owners)
 
 Route::middleware('guest')->group(function () {
     //Route::get or post()と書く。(URL, [コントローラー名, コントローラー内のメソッド名])の順で書く
@@ -35,7 +61,7 @@ Route::middleware('guest')->group(function () {
                 ->name('password.update');
 });
 
-Route::middleware('auth:users')->group(function () {
+Route::middleware('auth:owners')->group(function () {
     Route::get('verify-email', [EmailVerificationPromptController::class, '__invoke'])
                 ->name('verification.notice');
 
@@ -55,3 +81,4 @@ Route::middleware('auth:users')->group(function () {
     Route::post('logout', [AuthenticatedSessionController::class, 'destroy'])
                 ->name('logout');
 });
+

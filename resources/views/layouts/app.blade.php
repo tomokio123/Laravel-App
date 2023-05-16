@@ -20,8 +20,15 @@
     </head>
     <body class="font-sans antialiased">
         <div class="min-h-screen bg-gray-100">
-            @include('layouts.navigation')
-
+            <!-- Navigationファイルをrouteによって3パターンに分けたのでそのroute分岐処理 -->
+            <!-- auth()内に、ガード設定を書ける -->
+            @if(auth('admin')->user()) <!-- adminユーザーだったら -->
+                @include('layouts.admin-navigation')<!-- layouts/navigation.blade.php を読み込んでいる -->
+            @elseif(auth('owners')->user())
+                @include('layouts.owner-navigation')
+            @elseif(auth('users')->user())
+                @include('layouts.user-navigation')
+            @endif
             <!-- Page Heading -->
             <header class="bg-white shadow">
                 <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">

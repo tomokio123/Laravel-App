@@ -1,14 +1,38 @@
 <?php
+
 //コントローラを読み込んでいる
-use App\Http\Controllers\User\Auth\AuthenticatedSessionController;
-use App\Http\Controllers\User\Auth\ConfirmablePasswordController;
-use App\Http\Controllers\User\Auth\EmailVerificationNotificationController;
-use App\Http\Controllers\User\Auth\EmailVerificationPromptController;
-use App\Http\Controllers\User\Auth\NewPasswordController;
-use App\Http\Controllers\User\Auth\PasswordResetLinkController;
-use App\Http\Controllers\User\Auth\RegisteredUserController;
-use App\Http\Controllers\User\Auth\VerifyEmailController;
+use App\Http\Controllers\Admin\Auth\AuthenticatedSessionController;
+use App\Http\Controllers\Admin\Auth\ConfirmablePasswordController;
+use App\Http\Controllers\Admin\Auth\EmailVerificationNotificationController;
+use App\Http\Controllers\Admin\Auth\EmailVerificationPromptController;
+use App\Http\Controllers\Admin\Auth\NewPasswordController;
+use App\Http\Controllers\Admin\Auth\PasswordResetLinkController;
+use App\Http\Controllers\Admin\Auth\RegisteredUserController;
+use App\Http\Controllers\Admin\Auth\VerifyEmailController;
 use Illuminate\Support\Facades\Route;//ルーティングの機能を使うためにimportしている
+
+/*
+|--------------------------------------------------------------------------
+| Web Routes
+|--------------------------------------------------------------------------
+|
+| Here is where you can register web routes for your application. These
+| routes are loaded by the RouteServiceProvider within a group which
+| contains the "web" middleware group. Now create something great!
+|
+*/
+
+//Route::get or post()と書き、(URL, [コントローラー名, コントローラー内のメソッド名])の順で書く
+
+Route::get('/', function () {
+    return view('admin.welcome');
+});
+
+//laravel breezeを入れると以下の/dashboardルートが生成される
+Route::get('/dashboard', function () {
+    return view('admin.dashboard');
+})->middleware(['auth:admin'])->name('dashboard');//:admin追加
+
 
 Route::middleware('guest')->group(function () {
     //Route::get or post()と書く。(URL, [コントローラー名, コントローラー内のメソッド名])の順で書く
@@ -35,7 +59,7 @@ Route::middleware('guest')->group(function () {
                 ->name('password.update');
 });
 
-Route::middleware('auth:users')->group(function () {
+Route::middleware('auth:admin')->group(function () {
     Route::get('verify-email', [EmailVerificationPromptController::class, '__invoke'])
                 ->name('verification.notice');
 

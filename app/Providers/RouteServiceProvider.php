@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Facades\Route;
 
+//RouteServiceProviderは「ServiceProvider」なので画面を読み込むた度に再実行される。
 class RouteServiceProvider extends ServiceProvider
 {
     /**
@@ -17,7 +18,10 @@ class RouteServiceProvider extends ServiceProvider
      *
      * @var string
      */
-    public const HOME = '/dashboard';
+    public const HOME = '/dashboard';//デフォルトがこれ。ユーザがログインしたらDashBordにリダイレクトされる」って意味。パス指定
+    public const OWNER_HOME = "/owner/dashboard";
+    public const ADMIN_HOME = "/admin/dashboard";
+    //Http/Middleware/RedirectIfAuthenticated.phpなどで使う
 
     /**
      * The controller namespace for the application.
@@ -43,9 +47,26 @@ class RouteServiceProvider extends ServiceProvider
                 ->namespace($this->namespace)
                 ->group(base_path('routes/api.php'));
 
-            Route::middleware('web')
+            //adminのルーティング設定
+            Route::prefix("admin")
+                ->as("admin.")
+                //別名をつけることでMiddleWare/Authenticate.phpなどでRouteを出し分ける時に"user.login";などとできる
+                ->middleware('web')
+                ->namespace($this->namespace)
+                ->group(base_path('routes/admin.php'));
+            //userのルーティング設定
+            Route::prefix("/")
+                ->as("user.")
+                ->middleware('web')
                 ->namespace($this->namespace)
                 ->group(base_path('routes/web.php'));
+
+             //ownerのルーティング設定
+             Route::prefix("owner")
+                ->as("owner.")
+                ->middleware('web')
+                ->namespace($this->namespace)
+                ->group(base_path('routes/owner.php'));
         });
     }
 

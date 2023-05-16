@@ -18,12 +18,13 @@ use App\Http\Controllers\LifeCycleTestController;
 //Route::get or post()と書き、(URL, [コントローラー名, コントローラー内のメソッド名])の順で書く
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('user.welcome');
 });
 
+//laravel breezeを入れると以下の/dashboardルートが生成される
 Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth'])->name('dashboard');
+    return view('user.dashboard');
+})->middleware(['auth:users'])->name('dashboard');
 //->middleware(['auth'])認証していたら」ってこと
 //middleware(['quest'])は、「まだログインしていない」って意味
 //name('register'); などとすることで、名前付きルートを作ることができる。

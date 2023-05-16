@@ -41,11 +41,33 @@ class LoginRequest extends FormRequest
      *
      * @throws \Illuminate\Validation\ValidationException
      */
+
+     //このクラスはRequestクラスなのでrouteIsメソッドが使えっる
+     //そもそもリクエストクラスとは
+     //「ログインフォームに入力された値からパスワードを比較し認証する」こと。
     public function authenticate()
     {
         $this->ensureIsNotRateLimited();
 
-        if (! Auth::attempt($this->only('email', 'password'), $this->boolean('remember'))) {
+        //3つのタイプを分岐させる
+        //$guard = "owners"の右辺"owners"などは、config/Auth.php内の
+        //'guards'配列の[キー]の名前と完全一致している必要がある!
+        if($this->routeIs("owner.*")){//ownerのログインフォームから来ていたら
+            $guard = "owners"; //ownerのガード処理実行(owner専用のガード処理で認証処理を行う)
+        } elseif($this->routeIs("admin.*")){
+            $guard = "admin"; //adminのガード処理実行(admin専用のガード処理で認証処理を行う)
+        } else {
+            $guard = "users";//それ以外はuserのガード処理を適用する
+        }
+
+
+        //元々はガード処理がないのでguradを追加。どのログイン画面から渡ってくるかによって認証方法が変わるので
+        //ガードを「$guard」として変数としておき、事前にrouteIsでルート先を調査し、それに合わせて$guardに値を入れる
+        //そこで入れる値は config/Auth.php内の
+        //attemptメソッド：①emailカラムの値を見てデータの有無を調査。
+        //②あればpasswordに渡ってきた値を比較する
+        //一致した場合のみ認証開始することができる
+        if (! Auth::guard($guard)->attempt($this->only('email', 'password'), $this->boolean('remember'))) {
             RateLimiter::hit($this->throttleKey());
 
             throw ValidationException::withMessages([
