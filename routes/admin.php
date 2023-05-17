@@ -9,6 +9,7 @@ use App\Http\Controllers\Admin\Auth\NewPasswordController;
 use App\Http\Controllers\Admin\Auth\PasswordResetLinkController;
 use App\Http\Controllers\Admin\Auth\RegisteredUserController;
 use App\Http\Controllers\Admin\Auth\VerifyEmailController;
+use App\Http\Controllers\Admin\OwnersController;
 use Illuminate\Support\Facades\Route;//ルーティングの機能を使うためにimportしている
 
 /*
@@ -27,6 +28,10 @@ use Illuminate\Support\Facades\Route;//ルーティングの機能を使うた�
 Route::get('/', function () {
     return view('admin.welcome');
 });
+
+//ログインしているかの確認のためにguardをつける
+Route::resource('owners', OwnersController::class)
+->middleware('auth:admin');
 
 //laravel breezeを入れると以下の/dashboardルートが生成される
 Route::get('/dashboard', function () {
