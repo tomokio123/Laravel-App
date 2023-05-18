@@ -5,6 +5,10 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
+//「リソースコントローラ」:DBへのCRUD操作を行うために必要なアクション（メソッド）が定義されているコントローラ。
+//CRUD操作が必要なページの処理を記述するための叩き台。
+
+// routes/admin.phpにより admin/owners をOwnersControllerに定義すると記述した
 class OwnersController extends Controller
 {
     /**
@@ -12,9 +16,18 @@ class OwnersController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+
+     public function __construct()//まずガードかけて認証する
+     {
+        $this->middleware("auth:admin");
+        //$this->middleware("log")->only("index");
+        //$this->middleware("subcribed")->except("store");
+     }
+
+     // このコントローラに書いてあることはadmin/owners以下で行うが、
+     // そのURLに何もつけない(or /index をつける)と原則的にindexメソッドが呼ばれる!
     public function index()
     {
-        //
         dd("オーナー一覧です");
     }
 

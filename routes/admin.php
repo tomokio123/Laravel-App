@@ -30,6 +30,7 @@ Route::get('/', function () {
 });
 
 //ログインしているかの確認のためにguardをつける
+//「admin/owners」のURIで行うことを「OwnersController(リソースコントローラ)」に定義
 Route::resource('owners', OwnersController::class)
 ->middleware('auth:admin');
 
