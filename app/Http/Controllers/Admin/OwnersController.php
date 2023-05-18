@@ -31,12 +31,12 @@ class OwnersController extends Controller
      // そのURLに何もつけない(or /index をつける)と原則的にindexメソッドが呼ばれる!
     public function index()
     {
-        $date_now = Carbon::now();
-        $date_parse = Carbon::parse(now());
-        echo $date_now;
-        echo $date_parse;
-        $e_all = Owner::all(); //エロくアント
-        $q_get = DB::table("owners")->select("name", "created_at")->get(); //クエリビルダ(get->連想配列的に取得)
+        //$date_now = Carbon::now();
+        //$date_parse = Carbon::parse(now());
+        //echo $date_now;
+        //echo $date_parse;
+        //$e_all = Owner::all(); //エロくアント
+        //$q_get = DB::table("owners")->select("name", "created_at")->get(); //クエリビルダ(get->連想配列的に取得)
         //$q_first = DB::table("owners")->select("name")->first(); 
         //クエリビルダ(first->単純なオブジェクトとして取得(ここでは"name"))
         //$c_test = collect([
@@ -48,7 +48,9 @@ class OwnersController extends Controller
 
         //変数をビュー側に渡すならcompactメソッド。
         //compactの引数は""で囲んであげる。
-        return view("admin.owners.index", compact("e_all", "q_get"));
+
+        $owners = Owner::select("name", "email", "created_at")->get();
+        return view("admin.owners.index", compact("owners"));
 
     }
 
@@ -59,7 +61,9 @@ class OwnersController extends Controller
      */
     public function create()
     {
-        //
+        //view()ってのはメソッドではなく、ヘルパ関数である
+        return view("admin.owners.create");
+        //(viewsフォルダ内の)「adminフォルダのownersフォルダのcreate.blade.phpを表示」って意味!
     }
 
     /**
