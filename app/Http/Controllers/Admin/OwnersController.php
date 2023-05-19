@@ -4,9 +4,11 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 use App\Models\Owner; //Eloquant エロクアント,Modelのクラスを指定
 use Illuminate\Support\Facades\DB; //QueryBuidler クエリビルダー
 use Carbon\Carbon;
+use Illuminate\Validation\Rules;
 
 //「リソースコントローラ」:DBへのCRUD操作を行うために必要なアクション（メソッド）が定義されているコントローラ。
 //CRUD操作が必要なページの処理を記述するための叩き台。
@@ -63,7 +65,7 @@ class OwnersController extends Controller
     {
         //view()ってのはメソッドではなく、ヘルパ関数である
         return view("admin.owners.create");
-        //(viewsフォルダ内の)「adminフォルダのownersフォルダのcreate.blade.phpを表示」って意味!
+        //(viewsフォルダ内の)「adminフォルダのownersフォルダのcreate.blade.phpを表示」って意味
     }
 
     /**
@@ -72,9 +74,32 @@ class OwnersController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
+
+    // Request $request:[メソッドインジェクション]
+    //フォームで入力された値をRequestクラスとして引数で受けとっている
     public function store(Request $request)
     {
-        //
+        //まずバリデーションかけて
+        $request->validate([//AdminsTableとやりとり
+            'name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:admins'],
+            //ユニークキー:admins(adminsモデルてこと)
+            //したのconfirmedの前にStringいる？わからん、つけとくことにしよう。バリデーションだし。
+            //confirmedをつけることで二つの入力されたパスワードを
+            'password' => ['required', 'confirmed', Rules\Password::defaults()],
+        ]);
+        //ここで保存を実行
+        Owner::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
+        ]);
+
+        //sessionメッセージ「トースト」も
+        return redirect()
+        ->route("admin.owners.index")
+        ->with("message", "オーナー登録を実施しました");
+        //登録された後、admin.owners.index(一覧画面)にリダイレクトがかかる。
     }
 
     /**

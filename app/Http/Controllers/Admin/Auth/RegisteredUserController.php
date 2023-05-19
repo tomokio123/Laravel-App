@@ -33,10 +33,15 @@ class RegisteredUserController extends Controller
      */
     public function store(Request $request)
     {
+        //$request->validate([
+        //    'name' => 'required|string|max:255',
+        //    'email' => 'required|string|email|max:255|unique:admins',
+        //    'password' => 'required|string|confirmed|min:8',
+        //]);
         $request->validate([//AdminsTableとやりとり
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:admins'],
-            //ユニークキー:admins(adminsモデルてこと)
+            //ユニークキー：admins(adminsモデルてこと)
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
 

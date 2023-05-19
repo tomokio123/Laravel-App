@@ -6,7 +6,8 @@
             </a>
         </x-slot>
 
-        <!-- Validation Errors -->
+        <!-- Validation Errors --><!-- バリデーションエラー時の表示が書いてある-->
+        {{--以下のx-auth-validation-errorsが動作のバリデーションコードがかいているところ--}}
         <x-auth-validation-errors class="mb-4" :errors="$errors" />
 
         <form method="POST" action="{{ route('admin.register') }}">
