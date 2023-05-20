@@ -25,15 +25,16 @@ use Illuminate\Support\Facades\Route;//ルーティングの機能を使うた�
 
 //Route::get or post()と書き、(URL, [コントローラー名, コントローラー内のメソッド名])の順で書く
 
-Route::get('/', function () {
-    return view('admin.welcome');
-});
+//welcomeページは不要
+//Route::get('/', function () {
+//    return view('admin.welcome');
+//});
 
 //オーナー一覧画面のルート
 //ログインしているかの確認のためにguardをつける
 //「admin/owners」のURIで行うことを「OwnersController(リソースコントローラ)」に定義
 Route::resource('owners', OwnersController::class)
-->middleware('auth:admin');
+->middleware('auth:admin')->except("show");//showメソッドを外す
 
 //期限切れオーナーーのルート。URLのprefixとして/expired-owner/以下にルーティングを定義していく。
 //ガードが必須で、->middleware("auth:admin")としておき、adminnログイン者飲のみ、に限定する
