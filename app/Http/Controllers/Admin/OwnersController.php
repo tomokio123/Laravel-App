@@ -98,7 +98,11 @@ class OwnersController extends Controller
         //sessionメッセージ「トースト」も
         return redirect()
         ->route("admin.owners.index")
-        ->with("message", "オーナー登録を実施しました");
+        ->with(
+            ["message" => "オーナー登録を実施しました",
+            "status" => "info"]//この「status」をindex.blade.phpの[flash-message]の[status属性]に渡す
+        );
+        //->with("message", "オーナー登録を実施しました");
         //登録された後、admin.owners.index(一覧画面)にリダイレクトがかかる。
     }
 
@@ -148,7 +152,11 @@ class OwnersController extends Controller
         //保存できたら、indexへ戻すためのリダイレクトを記述。[更新しました]メッセージも出す
         return redirect()
         ->route("admin.owners.index")
-        ->with("message", "オーナー情報を更新しました");
+        ->with(
+            ["message" => "オーナー情報を更新しました",
+            "status" => "info"]//この「status」をindex.blade.phpの[flash-message]の[status属性]に渡す
+        );
+        //->with("message", "オーナー情報を更新しました");
     }
 
     /**
@@ -160,5 +168,28 @@ class OwnersController extends Controller
     public function destroy($id)
     {
         //
+        Owner::findOrFail($id)->delete(); //softDelete
+
+        //リダイレクト処理。indexに戻す
+        return redirect()
+        ->route("admin.owners.index")
+        ->with(
+            ["message" => "オーナー登録を削除しました",
+            "status" => "alert"]//この「status」をindex.blade.phpの[flash-message]の[status属性]に渡す
+        );
+    }
+
+    //期限切れオーナー一覧を表示するためのルート
+    public function expiredOwnerIndex()
+    {
+        $expiredOwners = Owner::onlyTrashed()->get();
+        return view("admin.expired-owners", compact("expiredOwners"));
+    }
+
+    //期限切れオーナーを削除するためのルート
+    public function expiredOwnerDestroy($id)
+    {
+        Owner::onlyTrashed()->findOrFail($id)->forceDelete();//強制削除する
+        return redirect()->route("admin.expired-owners.index");
     }
 }

@@ -5,10 +5,13 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Database\Eloquent\SoftDeletes;
+//SofrDeleteを扱う記述を以下で行うためにこれが必須
 
 class Owner extends Authenticatable
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes;
+    //この記述をすることで、Ownerモデル内のdeleteを扱うときは「ソフトデリート」として扱える
 
     /**
      * The attributes that are mass assignable.

@@ -29,10 +29,19 @@ Route::get('/', function () {
     return view('admin.welcome');
 });
 
+//オーナー一覧画面のルート
 //ログインしているかの確認のためにguardをつける
 //「admin/owners」のURIで行うことを「OwnersController(リソースコントローラ)」に定義
 Route::resource('owners', OwnersController::class)
 ->middleware('auth:admin');
+
+Route::prefix("expired-owners")->middleware("auth:admin")
+->group(function(){
+    Route::get("index", [OwnersController::class, 'expiredOwnerIndex'])
+    ->name('expired-owners.index');
+    Route::post("destroy/{owner}", [OwnersController::class, 'expiredOwnerDestroy'])
+    ->name('expired-owners.destroy');
+});
 
 //laravel breezeを入れると以下の/dashboardルートが生成される
 Route::get('/dashboard', function () {
