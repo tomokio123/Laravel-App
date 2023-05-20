@@ -51,7 +51,7 @@ class OwnersController extends Controller
         //変数をビュー側に渡すならcompactメソッド。
         //compactの引数は""で囲んであげる。
 
-        $owners = Owner::select("name", "email", "created_at")->get();
+        $owners = Owner::select("id", "name", "email", "created_at")->get();
         return view("admin.owners.index", compact("owners"));
 
     }
@@ -122,6 +122,8 @@ class OwnersController extends Controller
     public function edit($id)
     {
         //
+        $owner = Owner::findOrFail($id);
+        return view("admin.owners.edit", compact("owner"));
     }
 
     /**
@@ -131,9 +133,22 @@ class OwnersController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
+
+    //edit.blade.phpでフォームに入力された値が$requestに入る。
     public function update(Request $request, $id)
     {
-        //
+        //Ownerモデルでidを指定した情報をインスタンス化している
+        $owner = Owner::findOrFail($id);
+        //$ownerオブジェクトのnameに$requestオブジェクトのnameを入れる。
+        $owner->name = $request->name;
+        $owner->email = $request->email;
+        $owner->password = Hash::make($request->password);//暗号化するためにHashメソッドを使う
+        $owner->save();//保存処理
+
+        //保存できたら、indexへ戻すためのリダイレクトを記述。[更新しました]メッセージも出す
+        return redirect()
+        ->route("admin.owners.index")
+        ->with("message", "オーナー情報を更新しました");
     }
 
     /**
