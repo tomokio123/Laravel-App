@@ -49,7 +49,7 @@ Route::prefix("expired-owners")->middleware("auth:admin")
     Route::get("index", [OwnersController::class, 'expiredOwnerIndex'])
     ->name('expired-owners.index');
     //期限切れオーナー削除のルート定義
-    //削除は普通P、動詞として「DELETE」を定義するが、HTMLではGETかPOSTしか使えないので、postを使う
+    //削除は普通、動詞として「DELETE」を定義するが、HTMLではGETかPOSTしか使えないので、postを使う
     Route::post("destroy/{owner}", [OwnersController::class, 'expiredOwnerDestroy'])
     ->name('expired-owners.destroy');
 });

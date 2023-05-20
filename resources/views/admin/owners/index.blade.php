@@ -57,6 +57,8 @@
                           @endforeach
                         </tbody>
                       </table>
+                      {{--これを書くだけ({{$owners->links()}})で簡単なページネーションが完成する--}}
+                      {{ $owners->links() }}
                     </div>
                   </div>
                 </section>
