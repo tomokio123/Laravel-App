@@ -35,10 +35,21 @@ Route::get('/', function () {
 Route::resource('owners', OwnersController::class)
 ->middleware('auth:admin');
 
+//期限切れオーナーーのルート。URLのprefixとして/expired-owner/以下にルーティングを定義していく。
+//ガードが必須で、->middleware("auth:admin")としておき、adminnログイン者飲のみ、に限定する
+//
 Route::prefix("expired-owners")->middleware("auth:admin")
-->group(function(){
+->group(function(){//group関数はルーティングをまとめることができる。
+    //expiredOwnerの一覧か削除かの要件(送られてくるURL)によってルーティングを出し分けるようにしたい
+
+    //期限切れオーナー一覧のルート定義
+    //第一引数にURLの定義。第二引数で渡すコントローラーとその中のメソッドを指定する。
+    //[]でそれらを囲み->で名前付きルート(->name('expired-owners.destroy'))としている。
+    //名前付きルートは呼び出すコントローラ側でroute("expired-owners.index")的な感じでで呼び出せる。
     Route::get("index", [OwnersController::class, 'expiredOwnerIndex'])
     ->name('expired-owners.index');
+    //期限切れオーナー削除のルート定義
+    //削除は普通P、動詞として「DELETE」を定義するが、HTMLではGETかPOSTしか使えないので、postを使う
     Route::post("destroy/{owner}", [OwnersController::class, 'expiredOwnerDestroy'])
     ->name('expired-owners.destroy');
 });

@@ -49,6 +49,7 @@
                               <td class="px-4 py-3">
                                 {{-- data-idは自由に作った属性 --}}
                                 {{--onclickには下のJsのコードで作成したdeletePostメソッドを当てはめる--}}
+                                {{--data-〇〇としてカスタム属性とすることができる。、〇〇には好きにHTMLのプロパティを定義する--}}
                                 <a href="#" data-id="{{ $owner->id }}" onclick="deletePost(this)" class="text-white-500 bg-red-400 border-0 py-2 px-4 focus:outline-none hover:bg-red-500 rounded">削除</a>
                               </td>
                             </form>

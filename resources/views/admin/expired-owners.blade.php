@@ -26,6 +26,7 @@
                           </tr>
                         </thead>
                         <tbody>
+                          {{--渡ってくるのは $expiredOwners。--}}
                           @foreach ( $expiredOwners as $owner)
                           <tr>
                             <td class="px-4 py-3">{{ $owner->name }}</td>
@@ -34,11 +35,12 @@
                             
                             {{--actionの中の意味は「route()内で[admin/owners](OwnersController)内の[destroy]メソッドを呼び出す」ってこと↓--}}
                             {{--第二引数でownerのidを渡す必要があるので編集と同じIDを渡せばOK--}}
+                            {{--routeで定義した名前付きルートをここでも使っていく。名前付きルートはroute/admin.phpで定義している--}}
                             <form id="delete_{{ $owner->id }}" method="post" action="{{ route("admin.expired-owners.destroy", ['owner'=> $owner->id]) }}">
                               {{--フォームを送る際には必ずシーサーフ(@csrf)が必要--}}
                               @csrf 
                               <td class="px-4 py-3">
-                                {{-- data-idは自由に作った属性 --}}
+                                {{-- data-idは自由に作った属性。HTMLの「カスタム属性」 --}}
                                 {{--onclickには下のJsのコードで作成したdeletePostメソッドを当てはめる--}}
                                 <a href="#" data-id="{{ $owner->id }}" onclick="deletePost(this)" class="text-white-500 bg-red-400 border-0 py-2 px-4 focus:outline-none hover:bg-red-500 rounded">完全に削除</a>
                               </td>

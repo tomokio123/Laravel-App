@@ -182,14 +182,22 @@ class OwnersController extends Controller
     //期限切れオーナー一覧を表示するためのルート
     public function expiredOwnerIndex()
     {
+        //onlyTrashed=>「ソフトデリートされたものだけ」を->getで取得している
         $expiredOwners = Owner::onlyTrashed()->get();
+
+        //リダイレクト処理
         return view("admin.expired-owners", compact("expiredOwners"));
     }
 
     //期限切れオーナーを削除するためのルート
     public function expiredOwnerDestroy($id)
     {
+        //「ソフトデリートされたものだけ」を->findOrFailでidだけふるいにかけて、
+        //->forceDeleteでレコードごと削除している。
         Owner::onlyTrashed()->findOrFail($id)->forceDelete();//強制削除する
+
+        //リダイレクト処理。
+        //admin.phpで定義した(->name('expired-owners.index'))名前付きルートをここで使っていく。
         return redirect()->route("admin.expired-owners.index");
     }
 }
