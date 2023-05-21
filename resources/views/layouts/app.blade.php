@@ -29,6 +29,16 @@
             @elseif(auth('users')->user())
                 @include('layouts.user-navigation')
             @endif
+            {{--本当は下記が正しいがちょっと置いておく。lesson76の後半--}}
+            {{--上の何がまずいかって、owner画面でnavigationの部分がadminのままでownerにならない。なので「店舗情報」と「Dashboard」のナビゲーションが表示されない--}}
+            {{--@if(request()->is('admin*'))
+                @include('layouts.admin-navigation')
+            @elseif(request()->is('owner*'))
+                @include('layouts.owner-navigation')
+            @else
+                @include('layouts.user-navigation')
+            @endif--}}
+
             <!-- Page Heading -->
             <header class="bg-white shadow">
                 <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">

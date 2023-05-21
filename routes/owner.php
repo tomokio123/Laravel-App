@@ -8,6 +8,7 @@ use App\Http\Controllers\Owner\Auth\EmailVerificationPromptController;
 use App\Http\Controllers\Owner\Auth\NewPasswordController;
 use App\Http\Controllers\Owner\Auth\PasswordResetLinkController;
 use App\Http\Controllers\Owner\Auth\RegisteredUserController;
+use App\Http\Controllers\Owner\ShopController;//Shopコントローラ読み込み
 use App\Http\Controllers\Owner\Auth\VerifyEmailController;
 use Illuminate\Support\Facades\Route;//ルーティングの機能を使うためにimportしている
 
@@ -26,6 +27,22 @@ use Illuminate\Support\Facades\Route;//ルーティングの機能を使うた�
 
 Route::get('/', function () {
     return view('owner.welcome');
+});
+
+//ownersとしてログインしている時だけshops/indexなどに飛ぶことができる
+Route::prefix("shops")->middleware("auth:owners")
+->group(function(){
+    //お店一覧表示
+    Route::get("index", [ShopController::class, 'index'])
+    ->name('shops.index');
+    //{shop}などとして自分で決めた「キー」はShopControllerなどで$request->route()->parameter("shop")
+    //などとしてピンポイントで指定できる
+    //お店編集
+    Route::get("edit/{shop}", [ShopController::class, 'edit'])
+    ->name('shops.edit');//editは表示するだけなのでgetでOK
+    //お店更新->post
+    Route::post("update/{shop}", [ShopController::class, 'update'])
+    ->name('shops.update');
 });
 
 //laravel breezeを入れると以下の/dashboardルートが生成される
