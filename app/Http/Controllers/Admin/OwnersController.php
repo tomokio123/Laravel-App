@@ -9,6 +9,9 @@ use App\Models\Owner; //Eloquant エロクアント,Modelのクラスを指定
 use Illuminate\Support\Facades\DB; //QueryBuidler クエリビルダー
 use Carbon\Carbon;
 use Illuminate\Validation\Rules;
+use Throwable;
+use Illuminate\Support\Facades\Log;//Logのファサードがないと例外処理でファサードが使えない
+use App\Models\Shop;//モデルも読み込んでおく
 
 //「リソースコントローラ」:DBへのCRUD操作を行うために必要なアクション（メソッド）が定義されているコントローラ。
 //CRUD操作が必要なページの処理を記述するための叩き台。
@@ -89,12 +92,32 @@ class OwnersController extends Controller
             //confirmedをつけることで二つの入力されたパスワードを
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
-        //ここで保存を実行
-        Owner::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-        ]);
+
+        //トランザクションを書く前にもしエラーがあれば例外を吐けるようにしておく。
+        //$requestをtransaction内で使うためにはuse()文を書く必要がある
+        //以下ではuse($request)とすることでクロージャ内で$requestが使えるようになる
+        try{
+            DB::transaction(function() use($request){
+                //ここでcreateを実行
+                $owner = Owner::create([
+                    'name' => $request->name,
+                    'email' => $request->email,
+                    'password' => Hash::make($request->password),
+                ]);
+                //オーナーのcreateが成功したタイミングでオーナーidを外部キーとしてshopも作りたい
+                Shop::create([
+                    "owner_id" => $owner->id,
+                    'name' => "店名を入力してください",
+                    'information' => "",
+                    "filename" => "",
+                    'is_selling' => true,
+
+                ]);
+            }, 2); //第二引数に2を入れることで「2回繰り返す」の意味になる
+        }catch(Throwable $e){
+            Log::error($e);
+            throw $e;
+        }
 
         //sessionメッセージ「トースト」も
         return redirect()

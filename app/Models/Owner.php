@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Database\Eloquent\SoftDeletes;
 //SofrDeleteを扱う記述を以下で行うためにこれが必須
+use App\Models\Shop;
 
 class Owner extends Authenticatable
 {
@@ -42,4 +43,17 @@ class Owner extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+
+    
+    //リレーション設定。これをしないとviews/admin/owners/edit.phpの{{ $owner->shop->name }}のように
+    //「外部キーのプロパティ」に自由にアクセスすることができなくなる。今回の例では
+    //「オーナー画面から紐づくshop_id(外部キー)のname(店舗名)」にアクセスできなくなる。
+    //その関係を記述するためにOwner.php(Model)にshop()メソッドを登録し、以下のようにhasOne(一対一関係を明記)しておくと
+    //views/admin/owners/edit.phpの{{ $owner->shop->name }}のようにアクセスが可能になる。
+    //詳しくはreadoble->Eloquent:リレーション->「一対一」
+    public function shop()
+    {
+        return $this->hasOne(Shop::class);
+    }
 }

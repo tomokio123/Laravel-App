@@ -15,7 +15,10 @@ class CreateShopsTable extends Migration
     {
         Schema::create('shops', function (Blueprint $table) {
             $table->id();
-            $table->foreignId("owner_id")->constrained();//外部キー制約を追加
+            $table->foreignId("owner_id")->constrained()//外部キー制約を追加
+            ->onUpdate("cascade")
+            ->onDelete("cascade");//shopは一人のオーナに対して一つbelongしている。
+            //よってオーナを削除する際にこいつももろとも消さないと、エラーが出る。->php artisan migrate:refresh --seed
             $table->string("name");
             $table->text("information");//text形式
             $table->string("filename");
