@@ -12,7 +12,8 @@
               <div class="p-6 bg-white-500 border-b border-gray-200">
                   @foreach ($shops as $shop)
                   <div class="w-1/2 p-4">
-                  {{--editの場合はパラメーターも必要 --}}
+                  {{-- editの場合はパラメーターも必要。「どのIDに変更をするのか」を指定するために$shopのidを渡せ --}}
+                  {{-- 詳しくはShopコントローラーのeditメソッドに定義する。そのコントローラーの定義はroute/owner.phpに定義している --}}
                   <a href="{{ route("owner.shops.edit", ["shop" => $shop->id]) }}">
                     <div class="border rounded-md p-4">
                         <div class="mb-4">
@@ -27,7 +28,7 @@
                         </div>
                         <div>
                             @if (empty($shop->filename))
-                                <img src="{{ asset("images/noimage.jpeg") }}">
+                            <img src="{{ asset("images/noimage.jpeg") }}">
                             @else
                             <img src="{{ asset("storage/shops/" . $shop->filename) }}">
                             @endif

@@ -6,9 +6,10 @@ use App\Http\Controllers\Controller;
 use App\Models\Shop;//shopモデルもimportしてあげよう
 use Illuminate\Http\Request;
 
-
 //ログインしているownerのIDを取得するためにAuthファサードを使いたいのでこれを読み込む
 use Illuminate\Support\Facades\Auth;
+//ストレージフォルダでimageのアップロードなどを扱いたいので以下を読み込む
+use Illuminate\Support\Facades\Storage;
 
 class ShopController extends Controller
 {
@@ -46,11 +47,23 @@ class ShopController extends Controller
 
     public function edit($id)
     {
+        $shop = Shop::findOrFail($id); 
+
+        return view("owner.shops.edit", compact("shop"));
+        //compactで渡すときは変数から$を抜いたものに""をつける
 
     }
 
     public function update(Request $request, $id)
     {
+        $imageFile = $request->image;//リクエストのimageを変数に入れて
+        //null判定かつ、それがアップロードできているか(isValid)判定する
+        if(!is_null($imageFile) && $imageFile->isValid()){
+            Storage::putFile("public/shops", $imageFile);
+            //putFileメソッドは「storage/appフォルダ内にあるpublicフォルダ内にshopフォルダがあればそこに(無ければ作成し)、
+            //ファイル名も自動生成して保存してあげる」といくメソッド。第二引数には渡すimageが格納された変数を配置する
+        }
 
+        return redirect()->route("owner.shops.index");
     }
 }
