@@ -35,10 +35,10 @@ class ShopController extends Controller
     public function index()
     {
         //use Illuminate\Support\Facades\Auth を上で読み込め。
-        $ownerId = Auth::id();//ログインしているownerのIDを取得
+        //$ownerId = Auth::id();//ログインしているownerのIDを取得->$shopsの行に1行にまとめた
         //取得したowner Idを使ってShopモデルを検索する。
         //"owner_id"カラムに$ownerIdに入ってきた値と同じものがあれば->getする。
-        $shops = Shop::where("owner_id", $ownerId)->get();
+        $shops = Shop::where("owner_id", Auth::id())->get();
 
         //オーナーに紐づく1個以上のShopsデータ($shops)をviewに渡す
         return view("owner.shops.index", compact("shops"));
