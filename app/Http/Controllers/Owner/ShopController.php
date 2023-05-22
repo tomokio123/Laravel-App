@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 //ストレージフォルダでimageのアップロードなどを扱いたいので以下を読み込む
 use Illuminate\Support\Facades\Storage;
+use InterventionImage;
 
 class ShopController extends Controller
 {
@@ -59,9 +60,18 @@ class ShopController extends Controller
         $imageFile = $request->image;//リクエストのimageを変数に入れて
         //null判定かつ、それがアップロードできているか(isValid)判定する
         if(!is_null($imageFile) && $imageFile->isValid()){
-            Storage::putFile("public/shops", $imageFile);
+            Storage::putFile("public/shops", $imageFile); //リサイズなしの場合
+            //Storage::putFileAs('public/' . '/', $file, $fileNameTo);
             //putFileメソッドは「storage/appフォルダ内にあるpublicフォルダ内にshopフォルダがあればそこに(無ければ作成し)、
             //ファイル名も自動生成して保存してあげる」といくメソッド。第二引数には渡すimageが格納された変数を配置する
+            //$fileName = uniqid(rand().'_');
+            //$extension = $imageFile->extension();
+            //$fileNameToStore = $fileName . '.' . $extension;
+
+            //$resizedImage = InterventionImage::make($imageFile)->resize(1920, 1080)->encode();
+
+
+            //Storage::put('public/shops' . $fileNameToStore, $resizedImage);
         }
 
         return redirect()->route("owner.shops.index");
