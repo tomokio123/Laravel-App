@@ -10,7 +10,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 //ストレージフォルダでimageのアップロードなどを扱いたいので以下を読み込む
 use Illuminate\Support\Facades\Storage;
-use InterventionImage;
+//use InterventionImage;
+use App\Http\Requests\UploadImageRequest;
 
 class ShopController extends Controller
 {
@@ -55,7 +56,7 @@ class ShopController extends Controller
 
     }
 
-    public function update(Request $request, $id)
+    public function update(UploadImageRequest $request, $id)
     {
         $imageFile = $request->image;//リクエストのimageを変数に入れて
         //null判定かつ、それがアップロードできているか(isValid)判定する
