@@ -616,6 +616,12 @@ video {
   width: 0.25rem;
 }.w-16 {
   width: 4rem;
+}.w-32 {
+  width: 8rem;
+}.w-64 {
+  width: 16rem;
+}.w-96 {
+  width: 24rem;
 }.max-w-6xl {
   max-width: 72rem;
 }.max-w-7xl {

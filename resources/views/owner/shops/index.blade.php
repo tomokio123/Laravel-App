@@ -10,6 +10,8 @@
       <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
           <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
               <div class="p-6 bg-white-500 border-b border-gray-200">
+                {{--sessionとして渡ってきた[status]の情報をここに流す--}}
+                <x-flash-message status="session('status')" />
                   @foreach ($shops as $shop)
                   <div class="w-1/2 p-4">
                   {{-- editの場合はパラメーターも必要。「どのIDに変更をするのか」を指定するために$shopのidを渡せ --}}
@@ -26,13 +28,7 @@
                         <div class="text-xl">
                             {{ $shop->name }}
                         </div>
-                        <div>
-                            @if (empty($shop->filename))
-                            <img src="{{ asset("images/noimage.jpeg") }}">
-                            @else
-                            <img src="{{ asset("storage/shops/" . $shop->filename) }}">
-                            @endif
-                        </div>
+                        <x-shop-thumbnail :filename="$shop->filename" />
                     </div>
                   </a>
                   </div>
