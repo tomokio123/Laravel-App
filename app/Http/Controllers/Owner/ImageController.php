@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Image;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-
+use App\Http\Requests\UploadImageRequest;
 //[php artisan make:controller Owner/ImageController --resource ]で自動生成
 //Routeも設定しろ
 class ImageController extends Controller
@@ -49,6 +49,7 @@ class ImageController extends Controller
     public function create()
     {
         //
+        return view("owner.images.create");
     }
 
     /**
@@ -57,9 +58,10 @@ class ImageController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(UploadImageRequest $request)//UploadImageRequest型に制限する
     {
         //
+        dd($request);
     }
 
     /**
