@@ -9,6 +9,7 @@ use App\Http\Controllers\Owner\Auth\NewPasswordController;
 use App\Http\Controllers\Owner\Auth\PasswordResetLinkController;
 use App\Http\Controllers\Owner\Auth\RegisteredUserController;
 use App\Http\Controllers\Owner\ShopController;//Shopコントローラ読み込み
+use App\Http\Controllers\Owner\ImageController;//Shopコントローラ読み込み
 use App\Http\Controllers\Owner\Auth\VerifyEmailController;
 use Illuminate\Support\Facades\Route;//ルーティングの機能を使うためにimportしている
 
@@ -47,11 +48,17 @@ Route::prefix("shops")->middleware("auth:owners")
     ->name('shops.update');
 });
 
+//(商品)画像一覧画面のルート
+//ログインしているかの確認のためにguardをつける
+//「admin/owners」のURIで行うことを「OwnersController(リソースコントローラ)」に定義
+Route::resource('images', ImageController::class)
+->middleware('auth:owners')->except("show");//showメソッドを外す
+
 //laravel breezeを入れると以下の/dashboardルートが生成される
 //ログインした時に以下の/dashboardにリダイレクトがかかる
 Route::get('/dashboard', function () {
     return view('owner.dashboard');
-})->middleware(['auth:owners'])->name('dashboard');
+})->middleware('auth:owners')->name('dashboard');
 //ガード「auth:owners」として、ミドルウエアに追加。「オーナー権限を持っていたら」てこと
 //config/auth.phpの記述に基づいてミスなく書く。(auth:owners)
 
