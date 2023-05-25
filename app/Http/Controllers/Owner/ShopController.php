@@ -78,6 +78,7 @@ class ShopController extends Controller
         $imageFile = $request->image;//リクエストのimageを変数に入れて
         //null判定かつ、それがアップロードできているか(isValid)判定する
         if(!is_null($imageFile) && $imageFile->isValid()){
+            //$fileNameToStore = Storage::putFileAs('public/shops', $imageFile, "$imageFile");
             $fileNameToStore = Storage::putFile("public/shops", $imageFile); //リサイズなしの場合
             //putFileメソッドは「storage/appフォルダ内にあるpublicフォルダ内にshopフォルダがあればそこに(無ければ作成し)、
             //ファイル名も自動生成して保存してあげる」といくメソッド。第二引数には渡すimageが格納された変数を配置する
