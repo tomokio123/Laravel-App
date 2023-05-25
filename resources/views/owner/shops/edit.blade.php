@@ -31,6 +31,7 @@
                       <div class="relative">
                         <div class="w-96">
                           <x-shop-thumbnail :filename="$shop->filename" />
+                            {{--ShopControllerで作った変数をここで「属性」として使える--}}
                         </div>
                       </div>
                     </div>

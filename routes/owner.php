@@ -33,6 +33,8 @@ Route::get('/', function () {
 Route::prefix("shops")->middleware("auth:owners")
 ->group(function(){
     //お店一覧表示
+    //どこかでroute("owner.shops.index")などとリダイレクトすると、このルートに従ってコントローラが呼ばれる。
+    //つまり「ShopController内のindexメソッド」が呼ばれる。
     Route::get("index", [ShopController::class, 'index'])
     ->name('shops.index');
     //{shop}などとして自分で決めた「キー」はShopControllerなどで$request->route()->parameter("shop")
