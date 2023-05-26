@@ -586,6 +586,10 @@ video {
   height: 8rem;
 }.h-1 {
   height: 0.25rem;
+}.max-h-72 {
+  max-height: 18rem;
+}.max-h-2 {
+  max-height: 0.5rem;
 }.min-h-screen {
   min-height: 100vh;
 }.w-1\/4 {
@@ -1265,6 +1269,8 @@ video {
     border-top-width: 0px;
   }.md\:p-6 {
     padding: 1.5rem;
+  }.md\:p-4 {
+    padding: 1rem;
   }.md\:px-4 {
     padding-left: 1rem;
     padding-right: 1rem;

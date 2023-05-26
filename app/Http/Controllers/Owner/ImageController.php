@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Models\Image;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+//ストレージフォルダでimageのアップロードなどを扱いたいので以下を読み込む
+use Illuminate\Support\Facades\Storage;
 use App\Http\Requests\UploadImageRequest;
 //[php artisan make:controller Owner/ImageController --resource ]で自動生成
 //Routeも設定しろ
@@ -60,21 +62,30 @@ class ImageController extends Controller
      */
     public function store(UploadImageRequest $request)//UploadImageRequest型に制限する
     {
-        //
-        dd($request);
-    }
+        $imageFiles = $request->file('files');
+        if(!is_null($imageFiles)){
+            foreach($imageFiles as $imageFile => $e){
+                $fileNameToStore = Storage::putFile("public/products", $e['image']); //リサイズなしの場合
+                Image::create([
+                    'owner_id' => Auth::id(),
+                    'filename' => $fileNameToStore  
+                ]);
+            }
+            //if(is_array($imageFiles)){
+            //    foreach($imageFiles as $imageFile){
+            //        $fileNameToStore = Storage::putFile("public/products", $imageFile); //リサイズなしの場合
+            //    }
+            //} else {
+            //    $imageFile = $imageFiles;
+            //    $fileNameToStore = Storage::putFile("public/products", $imageFile);
+            //}
+        }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
+        return redirect()
+        ->route('owner.images.index')
+        ->with(['message' => '画像情報を更新しました。',
+                'status' => 'info' ]);
     }
-
     /**
      * Show the form for editing the specified resource.
      *
@@ -83,7 +94,10 @@ class ImageController extends Controller
      */
     public function edit($id)
     {
-        //
+        $image = Image::findOrFail($id); 
+
+        return view("owner.images.edit", compact("image"));
+        //compactで渡すときは変数から$を抜いたものに""をつける
     }
 
     /**
@@ -95,7 +109,19 @@ class ImageController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        //まず3つにバリデーションかけて
+        $request->validate([ 
+            'title' => ['string', 'max:50'],
+        ]);
+
+        $image = Image::findOrFail($id);
+        $image->title = $request->title; 
+        $image->save();//保存
+
+        return redirect()
+        ->route("owner.images.index")
+        ->with(['message' => '画像情報を更新しました。',
+                'status' => 'info' ]);//views/owner/shops/index.bladeにフラッシュメッセージの表示を書く
     }
 
     /**

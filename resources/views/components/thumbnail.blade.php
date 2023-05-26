@@ -13,7 +13,7 @@
   @else
   {{--なんでか知らんけどDBにfilnameをstoreするときに(ShopController参照)、パスがfilenameの先頭に含まれてしまう
   幸か不幸か、それにより画像の認識ができるようになり、ここでurl($filename)の[$filename]で、
-  勝手に分類ができているので以下の記述(\Storage::url($filename))のままでOKな気がする--}}
+  勝手に分類ができているので以下の記述()のままでOKな気がする--}}
   <img src="{{ \Storage::url($filename) }}">
   {{--ここでは\Storageファサードのurl()メソッドを使って画像ファイルのパスを得ていて、
   これによってpublicディレクトリー下のstorage/app/publicディレクトリ下にある
