@@ -132,6 +132,21 @@ class ImageController extends Controller
      */
     public function destroy($id)
     {
-        //
+        //DBの画像削除をする前にStrage内の画像削除
+        $image = Image::findOrFail($id);
+        $filePath = $image->filename;
+        //一応$filePathに値がないとまずいので処理しておく
+        if(Storage::exists($filePath)){
+            Storage::delete($filePath);//ここでStorage削除
+        }
+        //DBの画像削除
+        Image::findOrFail($id)->delete();
+        //リダイレクト処理。indexに戻す
+        return redirect()
+        ->route("owner.images.index")
+        ->with(
+            ["message" => "画像を削除しました",
+            "status" => "alert"]//この「status」をindex.blade.phpの[flash-message]の[status属性]に渡す
+        );
     }
 }
