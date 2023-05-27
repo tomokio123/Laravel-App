@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Stock;
 use Illuminate\Database\Seeder;
 
 //DatabaseSeederクラス内で、callメソッドを使用して追加のシードクラスを実行できます。
@@ -28,7 +29,7 @@ class DatabaseSeeder extends Seeder
             ImageSeeder::class,
             CategorySeeder::class,
             ProductSeeder::class,//これ後に書かんとあかん?
-
+            StockSeeder::class,
         ]);
     }
 }
