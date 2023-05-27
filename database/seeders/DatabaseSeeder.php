@@ -24,9 +24,11 @@ class DatabaseSeeder extends Seeder
         $this->call([
             AdminSeeder::class,
             OwnerSeeder::class,
+            ShopSeeder::class, //ShopSeederを追加
             ImageSeeder::class,
             CategorySeeder::class,
-            ShopSeeder::class  //ShopSeederを追加
+            ProductSeeder::class,//これ後に書かんとあかん?
+
         ]);
     }
 }
