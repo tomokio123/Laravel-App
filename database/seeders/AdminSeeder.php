@@ -17,12 +17,13 @@ class AdminSeeder extends Seeder
     public function run()
     {
         //
-        DB::table("admins")->insert([
-            //recreateしたmigrationファイルを参考にしよう
-            "name" => "test",
-            "email" => "test@test.com",
-            "password" => Hash::make("password123"),//passwordは暗号化を書けないとだめ
-            "created_at" => "2021/01/01 11:11:11"
-        ]);
+        DB::table("admins")->insert(
+        [    //recreateしたmigrationファイルを参考にしよう
+            "name" => "yuzu",
+            "email" => "yuzu@gmail.com",
+            "password" => Hash::make("yuzuman1307"),//passwordは暗号化を書けないとだめ
+            "created_at" => "2023/01/01 11:11:11"
+        ],
+    );
     }
 }

@@ -59,7 +59,13 @@ class OwnerSeeder extends Seeder
                 "email" => "test7@test.com",
                 "password" => Hash::make("password123"),//passwordは暗号化を書けないとだめ
                 "created_at" => "2021/01/01 11:11:11" 
-            ]
+            ],
+            [
+                "name" => "yuzu",
+                "email" => "yuzu@gmail.com",
+                "password" => Hash::make("yuzuman1307"),//passwordは暗号化を書けないとだめ
+                "created_at" => "2023/01/01 11:11:11" 
+            ],
 
 
         ]);

@@ -33,6 +33,13 @@ class ShopSeeder extends Seeder
                 "filename" => "" ,
                 "is_selling" => true
             ],
+            [
+                'owner_id' => 8,
+                'name' => 'ここに店名が入ります',
+                'information' => 'ここにお店の情報が入ります。ここにお店の情報が入ります。ここにお店の情報が入ります。',
+                'filename' => 'public/shops/sample1.png',
+                'is_selling' => true    
+            ],
         ]);
     }
 }
