@@ -19,10 +19,10 @@ class OwnerSeeder extends Seeder
         //
         DB::table("owners")->insert([
             [
-                "name" => "test1",
-                "email" => "test1@test.com",
-                "password" => Hash::make("password123"),//passwordは暗号化を書けないとだめ
-                "created_at" => "2021/01/01 11:11:11" 
+                "name" => "yuzu",
+                "email" => "yuzu@gmail.com",
+                "password" => Hash::make("yuzuman1307"),//passwordは暗号化を書けないとだめ
+                "created_at" => "2023/01/01 11:11:11" 
             ],
             [
                 "name" => "test2",
@@ -61,13 +61,11 @@ class OwnerSeeder extends Seeder
                 "created_at" => "2021/01/01 11:11:11" 
             ],
             [
-                "name" => "yuzu",
-                "email" => "yuzu@gmail.com",
-                "password" => Hash::make("yuzuman1307"),//passwordは暗号化を書けないとだめ
-                "created_at" => "2023/01/01 11:11:11" 
+                "name" => "test8",
+                "email" => "test8@test.com",
+                "password" => Hash::make("password123"),//passwordは暗号化を書けないとだめ
+                "created_at" => "2021/01/01 11:11:11" 
             ],
-
-
         ]);
     }
 }

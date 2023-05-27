@@ -3,18 +3,45 @@
 namespace App\Http\Controllers\Owner;
 
 use App\Http\Controllers\Controller;
+use App\Models\Image;
+use App\Models\Product;
+use App\Models\SecondaryCategory;
+use App\Models\Owner;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ProductController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+    public function __construct()
+    {
+        $this->middleware("auth:owners");//オーナーログインに限る
+
+        $this->middleware(function ($request, $next) {
+            //
+            $id = $request->route()->parameter("product");
+            if(!is_null($id)){//null判定
+                //product内にはOWnerは紐づいていないので一旦shopに行ってからowner特定してID取得する
+                $productsOwnerId = Product::findOrFail($id)->shop->owner->id;
+                $productId = (int)$productsOwnerId; //キャストして文字列を数字にした。
+                if($productId  !== Auth::id()){//同じでなかったら
+                    abort(404); //404画面表示
+                }
+            }
+
+            return $next($request);
+        });
+    }
+
+    //product一覧を表示する
     public function index()
     {
-        //
+        //imageFirst = Productの[image1]をそう定義しているだけ、別名。
+        //$products = Owner::findOrFail(Auth::id())->shop->product;
+        //withで「EagerLord」処理。引数にはリレーションを書く。リレーションのリレーションを引っ張ってくるには.で繋げることができる
+        $ownerInfo = Owner::with("shop.product.imageFirst")//Owner一人に紐づく「たくさんの店」が持つ「たくさんの商品」のimage1のID
+        ->where('id', Auth::id())->get();
+        //dd($ownerInfo);
+        return view("owner.products.index", compact("ownerInfo"));
     }
 
     /**

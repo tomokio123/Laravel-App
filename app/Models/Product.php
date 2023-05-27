@@ -28,6 +28,7 @@ class Product extends Model
         return $this->belongsTo(SecondaryCategory::class, 'secondary_category_id');
     }
 
+    //$image1という商品Modelのプロパティを「imageFirst()」とリレーションにおいては呼ぶことにする。
     public function imageFirst()
     {
         return $this->belongsTo(Image::class, 'image1', 'id');
