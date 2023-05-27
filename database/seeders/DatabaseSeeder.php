@@ -25,6 +25,7 @@ class DatabaseSeeder extends Seeder
             AdminSeeder::class,
             OwnerSeeder::class,
             ImageSeeder::class,
+            CategorySeeder::class,
             ShopSeeder::class  //ShopSeederを追加
         ]);
     }
