@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Owner;
 use App\Http\Controllers\Controller;
 use App\Models\Image;
 use App\Models\Product;
+use Illuminate\Support\Facades\Storage;
 use App\Models\Shop;
 use App\Models\PrimaryCategory;
 use App\Models\Owner;
