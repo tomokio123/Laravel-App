@@ -3,6 +3,7 @@ if ($name === 'image1') { $modal = 'modal-1';}
 if ($name === 'image2') { $modal = 'modal-2';}
 if ($name === 'image3') { $modal = 'modal-3';}
 if ($name === 'image4') { $modal = 'modal-4';}
+if ($name === 'image5') { $modal = 'modal-5';}
 @endphp
 
 {{--<div class="wrapper">
@@ -12,7 +13,7 @@ if ($name === 'image4') { $modal = 'modal-4';}
 {{--https://gist.github.com/ghosh/4f94cf497d7090359a5c9f81caf60699 のmicromodal.htmlを貼りつけ--}}
 {{--①mimi-modal--}}
 <div class="modal micromodal-slide" id="{{ $modal }}" aria-hidden="true">
-  <div class="modal__overlay" tabindex="-1" data-micromodal-close>
+  <div class="modal__overlay z-50" tabindex="-1" data-micromodal-close>
     <div class="modal__container" role="dialog" aria-modal="true" aria-labelledby="{{ $modal }}-title">
       <header class="modal__header">
         <h2 class="pr-6 text-indigo-800" id="{{ $modal }}-title">
@@ -50,7 +51,7 @@ if ($name === 'image4') { $modal = 'modal-4';}
 </div>
 
 <div class="flex justify-around items-center mb-4">
-  <a data-micromodal-trigger="{{ $modal }}" href='javascript:;'>ファイルを選択</a>
+  <a class="py-2 px-4 bg-gray-400" data-micromodal-trigger="{{ $modal }}" href='javascript:;'>ファイルを選択</a>
   <div class="w-1/4">
     {{--$nameにimage1やimage2などが入ってくる--}}
     <img id="{{ $name }}_thumbnail" src="">

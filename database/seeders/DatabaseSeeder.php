@@ -28,8 +28,8 @@ class DatabaseSeeder extends Seeder
             ShopSeeder::class, //ShopSeederを追加
             ImageSeeder::class,
             CategorySeeder::class,
-            ProductSeeder::class,//これ後に書かんとあかん?
-            StockSeeder::class,
+            //ProductSeeder::class,//これ後に書かんとあかん?
+            //StockSeeder::class,
         ]);
     }
 }
