@@ -4,6 +4,8 @@ if ($name === 'image2') { $modal = 'modal-2';}
 if ($name === 'image3') { $modal = 'modal-3';}
 if ($name === 'image4') { $modal = 'modal-4';}
 if ($name === 'image5') { $modal = 'modal-5';}
+$cImage = $currentImage ?? '';
+$cId = $currentImage ?? '' ;
 @endphp
 
 {{--<div class="wrapper">
@@ -53,13 +55,14 @@ if ($name === 'image5') { $modal = 'modal-5';}
 <div class="flex justify-around items-center mb-4">
   <a class="py-2 px-4 bg-gray-400" data-micromodal-trigger="{{ $modal }}" href='javascript:;'>ファイルを選択</a>
   <div class="w-1/4">
+    {{--サムネイルは画像があったら表示なければ表示しないようにする--}}
     {{--$nameにimage1やimage2などが入ってくる--}}
-    <img id="{{ $name }}_thumbnail" src="">
+    <img id="{{ $name }}_thumbnail" @if ($cImage)src="{{ \Storage::url($image->filename)  }}" @else src="" @endif>
     {{--id="image1_thumbnail"などといったidを持たせてjs側から呼び出す--}}
   </div>
 </div>
 {{-- [name= ]には image1などを入れたい--}}
-<input id="{{ $name }}_hidden" type="hidden" name="{{ $name }}" value="">
+<input id="{{ $name }}_hidden" type="hidden" name="{{ $name }}" value="{{ $cId }}">
 
 {{--②midlle-modal--}}
 {{--<div class="modal micromodal-slide" id="{{ $modal }}" aria-hidden="true">

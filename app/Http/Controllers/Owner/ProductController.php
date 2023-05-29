@@ -58,7 +58,6 @@ class ProductController extends Controller
      */
     public function create()
     {
-        //
         $shops = Shop::where('owner_id', Auth::id())
         ->select('id', 'name')
         ->get();
@@ -136,26 +135,29 @@ class ProductController extends Controller
             "status" => "info"]//この「status」をindex.blade.phpの[flash-message]の[status属性]に渡す
         );
     }
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function edit($id)
     {
-        //
+        //商品ID取得
+        $product = Product::findOrFail($id); //idで商品IDを指定する
+        //在庫情報取得
+        $quantity = Stock::where('product_id', $product->id)
+        ->sum('quantity');
+
+        //外部キー取得
+        $shops = Shop::where('owner_id', Auth::id())
+        ->select('id', 'name')
+        ->get();
+        $images = Image::where('owner_id', Auth::id())
+        ->select('id', 'title', 'filename')
+        ->orderby('updated_at', 'desc')->get();
+        //リレーション先の情報を取ってくるときはN+1問題→Eager Loadingを行え
+        //PrimaryCategoryモデル内のsecondary()のこと↓
+        $categories = PrimaryCategory::with('secondary')
+        ->get();
+
+        //編集画面に渡す
+        return view("owner.products.edit", compact("product", "quantity", "shops", "images", "categories"));
     }
 
     /**
