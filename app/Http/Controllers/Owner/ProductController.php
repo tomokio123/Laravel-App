@@ -15,6 +15,7 @@ use App\Models\Stock;
 use App\Models\PrimaryCategory;
 use App\Models\Owner;
 use Illuminate\Http\Request;
+use App\Http\Requests\ProductRequest;//update・storeメソッド両方ともProductRequestに型を変更する
 use Illuminate\Support\Facades\Auth;
 
 class ProductController extends Controller
@@ -78,25 +79,10 @@ class ProductController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(ProductRequest $request)
+    //バリデーションをProductRequestに記述しそれが通過したらProductRequestで返り値が来るようにしたので
+    //ProductRequestとしておく
     {
-        //$request->validate([//AdminsTableとやりとり
-        //    //''などの「キー」はview側から入ってくるname属性
-        //    'name' => ['required', 'string', 'max:255'],
-        //    'information' => ['required', 'string', 'max:1000'],
-        //    'price' => ['required', 'integer'],
-        //    'sort_order' => ["nullable", 'integer'],
-        //    'quantity' => ['required', 'integer'],
-        //    //exits:shop_idが存在しているかどうかの確認。=>[exits:shops,id]//shopsと書いている場所にはtable名を書いている
-        //    'shop_id' => ['required', 'exits:shops,id'],
-        //    'category' => ['required', 'exits:secondary_categories,id'],
-        //    'image1' => ['nullable', 'exits:images,id'],
-        //    'image2' => ['nullable', 'exits:images,id'],
-        //    'image3' => ['nullable', 'exits:images,id'],
-        //    'image4' => ['nullable', 'exits:images,id'],
-        //    'is_selling' => ['required'],
-        //]);
-
         //保存処理は商品と在庫をまとめて登録したいので、transactionをかける。
         try{
             DB::transaction(function() use($request){
@@ -167,9 +153,29 @@ class ProductController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(ProductRequest $request, $id)
     {
-        //
+        //ProductRequest(フォームリクエストでvalidationをかけつつ、さらに数量にバリデーションをかける)
+        $request->validate([  
+            'current_quantity' => ['required', 'integer'],
+        ]);
+
+        $product = Product::findOrFail($id);//1つの商品IDを取得
+        $quantity = Stock::where('product_id', $product->id)//productIDの在庫合計を取得
+        ->sum('quantity');
+
+        //edit画面で取得した在庫量とupdateで読み込んだ際に取得した在庫の数が異なっていれば戻す
+        //ルートパラメータの値を取得する必要がある
+        if($request->current_quantity !== $quantity){
+            //ルートパラメータを取得することができる
+            $id = $request->route()->parameter("product");
+            //ルートパラメータを持った状態で戻すことができる
+            return redirect()->route('owner.products.edit', ['product' => $id])
+            ->with([
+                "message" => "在庫数が変更されています。再度確認してください",
+                "status" => "alert"]
+            );
+        }
     }
 
     /**

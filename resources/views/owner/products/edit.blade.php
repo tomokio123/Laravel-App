@@ -10,8 +10,12 @@
           <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
               <div class="p-6 bg-white border-b border-gray-200">
                 <x-auth-validation-errors class="mb-4" :errors="$errors" />  
+                {{--sessionとして渡ってきた[status]の情報をここに流す--}}
+                <x-flash-message status="session('status')" />
                 <form method="post" action="{{ route('owner.products.update', ["product" => $product->id]) }}" >
-                    @csrf
+                  @csrf {{-- CSRF保護 --}}
+                  {{--htmlはPOST/GETしかサポートしていないから他のメソッドと使うときは擬似メソッドを立てる↓--}}
+                  @method('put')
                     <div class="-m-2">
                       <div class="p-2 w-1/2 mx-auto">
                         <div class="relative">
