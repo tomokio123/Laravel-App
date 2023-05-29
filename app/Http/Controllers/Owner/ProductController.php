@@ -5,8 +5,13 @@ namespace App\Http\Controllers\Owner;
 use App\Http\Controllers\Controller;
 use App\Models\Image;
 use App\Models\Product;
+use Throwable;
+use Illuminate\Support\Facades\Log;//Logのファサードがないと例外処理でファサードが使えない
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\DB; //QueryBuidler クエリビルダー
 use App\Models\Shop;
+use App\Models\Stock;
 use App\Models\PrimaryCategory;
 use App\Models\Owner;
 use Illuminate\Http\Request;
@@ -76,10 +81,61 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
-        //
-        dd($request);
-    }
+        //$request->validate([//AdminsTableとやりとり
+        //    //''などの「キー」はview側から入ってくるname属性
+        //    'name' => ['required', 'string', 'max:255'],
+        //    'information' => ['required', 'string', 'max:1000'],
+        //    'price' => ['required', 'integer'],
+        //    'sort_order' => ["nullable", 'integer'],
+        //    'quantity' => ['required', 'integer'],
+        //    //exits:shop_idが存在しているかどうかの確認。=>[exits:shops,id]//shopsと書いている場所にはtable名を書いている
+        //    'shop_id' => ['required', 'exits:shops,id'],
+        //    'category' => ['required', 'exits:secondary_categories,id'],
+        //    'image1' => ['nullable', 'exits:images,id'],
+        //    'image2' => ['nullable', 'exits:images,id'],
+        //    'image3' => ['nullable', 'exits:images,id'],
+        //    'image4' => ['nullable', 'exits:images,id'],
+        //    'is_selling' => ['required'],
+        //]);
 
+        //保存処理は商品と在庫をまとめて登録したいので、transactionをかける。
+        try{
+            DB::transaction(function() use($request){
+                $product = Product::create([
+                    'name' => $request->name,
+                    'information' => $request->information,
+                    'price' => $request->price,
+                    'sort_order' => $request->sort_order,
+                    'shop_id' => $request->shop_id,
+                    //view側のname($request->)としてはcategoryだが、テーブルとしてはsecondary_category_idであるので左右不一致
+                    'secondary_category_id' => $request->category,
+                    'image1' => $request->image1,
+                    'image2' => $request->image2,
+                    'image3' => $request->image3,
+                    'image4' => $request->image4,
+                    'is_selling' => $request->is_selling,
+                ]);
+
+                //同時にストックも保存したい
+                Stock::create([
+                    'product_id' => $product->id,//外部キー。上記で登録した個々の商品Idのこと
+                    'type' => 1, //入庫在庫を増やす場合には[1]とする
+                    'quantity' => $request->quantity //quantityは$requestから入ってくる
+                ]);
+
+            }, 2); //第二引数に2を入れることで「2回繰り返す」の意味になる
+        }catch(Throwable $e){
+            Log::error($e);
+            throw $e;
+        }
+
+        return redirect()
+        ->route("owner.products.index")
+        ->with(
+            ["message" => "商品を登録しました",
+            "status" => "info"]//この「status」をindex.blade.phpの[flash-message]の[status属性]に渡す
+        );
+    }
     /**
      * Display the specified resource.
      *

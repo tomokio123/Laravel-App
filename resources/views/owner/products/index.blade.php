@@ -25,8 +25,9 @@
                       <a href="{{ route("owner.products.edit", ["product" => $product->id]) }}"> 
                         <div class="border rounded-md p-4 max-h-30">
                           {{--productの中にはfilenameが無いので一旦imageFirstに繋いであげる--}}
-                            <x-thumbnail :filename="$product->imageFirst->filename" type="products" />
-                            {{--<div class="text-gray-700">{{ $product->name}}</div>--}}
+                          {{--//image1を設定してない場合はnullを入れることにしたので、ここでnull判定をする。文字列の場合は:filename->filenameと書き換える--}}
+                            <x-thumbnail filename="{{ $product->imageFirst->filename ?? '' }}" type="products" />
+                            <div class="text-gray-700">{{ $product->name}}</div>
                         </div>
                       </a>
                     </div>
