@@ -196,6 +196,7 @@ class ProductController extends Controller
                         $product->is_selling = $request->is_selling;
                         $product->save();//DBに繋いで保存を実行するにはsaveメソッドいる
 
+                        //定数ファイル追加できないエラーになる
                     //1:追加
                     if($request->type === "1"){
                         $newQuantity = $request->quantity;
