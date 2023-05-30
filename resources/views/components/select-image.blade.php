@@ -4,8 +4,9 @@ if ($name === 'image2') { $modal = 'modal-2';}
 if ($name === 'image3') { $modal = 'modal-3';}
 if ($name === 'image4') { $modal = 'modal-4';}
 if ($name === 'image5') { $modal = 'modal-5';}
-$cImage = $currentImage ?? '';
-$cId = $currentImage ?? '' ;
+$cImage = $currentImage ?? '' ;
+$cId = $currentId ?? '' ;
+//dd($cImage);
 @endphp
 
 {{--<div class="wrapper">
@@ -57,7 +58,8 @@ $cId = $currentImage ?? '' ;
   <div class="w-1/4">
     {{--サムネイルは画像があったら表示なければ表示しないようにする--}}
     {{--$nameにimage1やimage2などが入ってくる--}}
-    <img id="{{ $name }}_thumbnail" @if ($cImage)src="{{ \Storage::url($image->filename)  }}" @else src="" @endif>
+    {{--ここで表示されるのは"/storage/products/sample1.png"--}} 
+    <img id="{{ $name }}_thumbnail" @if ($cImage)src="{{ \Storage::url($cImage)  }}" @else src="" @endif>
     {{--id="image1_thumbnail"などといったidを持たせてjs側から呼び出す--}}
   </div>
 </div>

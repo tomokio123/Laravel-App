@@ -87,7 +87,7 @@
                         <div class="relative">
                           <label for="category" class="leading-7 text-sm text-gray-600">カテゴリー</label>
                           <select name="category" id="category" class="w-full bg-gray-100 bg-opacity-50 rounded border border-gray-300 focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out">
-                            {{--ここまではPrimaryCategoryであり、非活性の(ラベルのみの)<optgroup>タグに表示する。--}}
+                            {{--ここまではPrimaryCategoryであり、非活性の(ラベルのみの)<optgroup>タグに表示する。--}}                          
                             @foreach($categories as $category)
                              <optgroup label="{{ $category->name }}" >
                               {{--それぞれのPrimaryCategoryに紐づいているSecondaryCategoryを取り出して、<option>で選べるようにする--}}
@@ -103,10 +103,13 @@
                       </div>
                       {{--現在選択している箇所もコンポーネントに渡してあげる--}}
                       {{--それぞれのimageIDやimage名を取得できる--}}
-                      <x-select-image :images="$images" currentId="{{ $product->image1 }}" currentImage="{{ $product->imageFirst->filename ?? "" }}" name="image1" />
-                      <x-select-image :images="$images" currentId="{{ $product->image2 }}" currentImage="{{ $product->imageSecond->filename ?? "" }}" name="image2" />
-                      <x-select-image :images="$images" currentId="{{ $product->image3 }}" currentImage="{{ $product->imageThird->filename ?? "" }}" name="image3" />
-                      <x-select-image :images="$images" currentId="{{ $product->image4 }}" currentImage="{{ $product->imageFourth->filename ?? "" }}" name="image4" />
+                      {{--<div>{{ $images ?? "nasi"}}</div>--}}
+                      {{--$product->imageFirst->filename => public/products/sample1.pngが入っている
+                      images => [{"id":1,"title":null,"filename":"public\/products\/sample1.png"},などが入っている--}}
+                      <x-select-image :images="$images" name="image1" />
+                      <x-select-image :images="$images"  name="image2" />
+                      <x-select-image :images="$images" name="image3" />
+                      <x-select-image :images="$images"  name="image4" />
                       {{--一旦を作って凌いでいる。なんでかはわからん--}}
                       <x-select-image :images="$images" name="image5" />
                       {{--

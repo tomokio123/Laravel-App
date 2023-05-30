@@ -142,10 +142,11 @@ class ProductController extends Controller
         $categories = PrimaryCategory::with('secondary')
         ->get();
 
+        // dd($product->image1); => 1
+        //dd($product->imageFirst);=>  "filename" => "public/products/sample1.png"
         //編集画面に渡す
         return view("owner.products.edit", compact("product", "quantity", "shops", "images", "categories"));
     }
-
     /**
      * Update the specified resource in storage.
      *
@@ -155,6 +156,7 @@ class ProductController extends Controller
      */
     public function update(ProductRequest $request, $id)
     {
+        //dd($request);
         //ProductRequest(フォームリクエストでvalidationをかけつつ、さらに数量にバリデーションをかける)
         $request->validate([  
             'current_quantity' => ['required', 'integer'],
@@ -174,6 +176,52 @@ class ProductController extends Controller
             ->with([
                 "message" => "在庫数が変更されています。再度確認してください",
                 "status" => "alert"]
+            );
+        } else {
+             //保存処理は商品と在庫をまとめて登録したいので、transactionをかける。
+             try{
+                DB::transaction(function () use($request, $product) {
+                    //$product->name(現在の商品情報たち) = $request->name(更新ボタンのrequestから送られてきた情報);
+                    //とすることで情報の上書きをしている
+                        $product->name = $request->name;
+                        $product->information = $request->information;
+                        $product->price = $request->price;
+                        $product->sort_order = $request->sort_order;
+                        $product->shop_id = $request->shop_id;
+                        $product->secondary_category_id = $request->category;
+                        $product->image1 = $request->image1;
+                        $product->image2 = $request->image2;
+                        $product->image3 = $request->image3;
+                        $product->image4 = $request->image4;
+                        $product->is_selling = $request->is_selling;
+                        $product->save();//DBに繋いで保存を実行するにはsaveメソッドいる
+
+                    //1:追加
+                    if($request->type === "1"){
+                        $newQuantity = $request->quantity;
+                    }
+                    //2:削減(-)
+                    if($request->type === "2"){
+                        $newQuantity = $request->quantity * -1;
+                    }
+
+                    Stock::create([
+                        'product_id' => $product->id,
+                        'type' => $request->type,
+                        'quantity' => $newQuantity
+                    ]);
+                }, 2);
+            }catch(Throwable $e){
+                Log::error($e);
+                throw $e;
+            }
+            
+
+            return redirect()
+            ->route("owner.products.index")
+            ->with(
+                ["message" => "商品情報を更新しました",
+                "status" => "info"]//この「status」をindex.blade.phpの[flash-message]の[status属性]に渡す
             );
         }
     }
