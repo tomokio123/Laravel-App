@@ -132,6 +132,16 @@
                       </div>
                     </div>
                   </form>
+                  <form id="delete_{{ $product->id }}" method="post" action="{{ route("owner.products.destroy", ['product'=> $product->id]) }}">
+                    {{--フォームを送る際には必ずシーサーフ(@csrf)が必要--}}
+                    @csrf 
+                    @method("delete")
+                    <div class="flex justify-around p-2 w-full mt-32 mb-12">
+                      {{-- data-idは自由に作った属性 --}} 
+                      {{--data-〇〇としてカスタム属性とすることができる。、〇〇には好きにHTMLのプロパティを定義する--}}
+                      <a href="#" data-id="{{ $product->id }}" onclick="deletePost(this)" class="text-white-500 bg-red-400 border-0 py-2 px-4 focus:outline-none hover:bg-red-500 rounded">削除する</a>
+                    </div>
+                  </form>
               </div>
           </div>
       </div>
@@ -153,6 +163,13 @@
         MicroModal.close(modal);
     }, )
     })  
+
+    function deletePost(e) {
+      "use strict";
+      if(confirm("本当に削除してもいいでスカ？")) {
+        document.getElementById("delete_" + e.dataset.id).submit();
+      }
+    }
   </script>
 </x-app-layout>
 

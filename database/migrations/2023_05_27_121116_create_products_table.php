@@ -20,8 +20,8 @@ class CreateProductsTable extends Migration
             $table->unsignedInteger("price");
             $table->boolean("is_selling");
             $table->integer("sort_order")->nullable();
-
-            $table->foreignId('shop_id')
+            //以下のようなcascade処理は「親のIDが消える(or更新される)とこのデータも連動する」という事を定めている
+            $table->foreignId('shop_id')  //shop(_id)が消えるとproductも消えるようにする
             ->constrained()
             ->onUpdate('cascade')
             ->onDelete('cascade');

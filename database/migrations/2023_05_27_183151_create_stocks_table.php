@@ -15,7 +15,7 @@ class CreateStocksTable extends Migration
     {
         Schema::create('t_stocks', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('product_id')
+            $table->foreignId('product_id')//cascade:「productが消えると同時にstockも消えるようにする」こと。
             ->constrained()
             ->onUpdate('cascade')
             ->onDelete('cascade');
