@@ -27,10 +27,6 @@ use Illuminate\Support\Facades\Route;//ルーティングの機能を使うた�
 
 //Route::get or post()と書き、(URL, [コントローラー名, コントローラー内のメソッド名])の順で書く
 
-Route::get('/', function () {
-    return view('owner.welcome');
-});
-
 //ownersとしてログインしている時だけshops/indexなどに飛ぶことができる
 Route::prefix("shops")->middleware("auth:owners")
 ->group(function(){
@@ -68,10 +64,10 @@ Route::get('/dashboard', function () {;
 
 Route::middleware('guest')->group(function () {
     //Route::get or post()と書く。(URL, [コントローラー名, コントローラー内のメソッド名])の順で書く
-    Route::get('register', [RegisteredUserController::class, 'create'])
-                ->name('register');
+    //Route::get('register', [RegisteredUserController::class, 'create'])
+    //            ->name('register');
 
-    Route::post('register', [RegisteredUserController::class, 'store']);
+    //Route::post('register', [RegisteredUserController::class, 'store']);
 
     Route::get('login', [AuthenticatedSessionController::class, 'create'])
                 ->name('login');
