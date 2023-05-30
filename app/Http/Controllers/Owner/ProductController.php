@@ -235,13 +235,7 @@ class ProductController extends Controller
      */
     public function destroy($id)
     {
-        //DBの画像削除をする前にStrage内の画像削除
         Product::findOrFail($id)->delete();
-        //$filePath = $image->filename;
-        //一応$filePathに値がないとまずいので処理しておく
-        //if(Storage::exists($filePath)){
-        //    Storage::delete($filePath);//ここでStorage削除
-        //}
         //リダイレクト処理。indexに戻す
         return redirect()
         ->route("owner.products.index")

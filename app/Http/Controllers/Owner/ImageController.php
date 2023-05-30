@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Owner;
 
 use App\Http\Controllers\Controller;
 use App\Models\Image;
+use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 //ストレージフォルダでimageのアップロードなどを扱いたいので以下を読み込む
@@ -132,9 +133,43 @@ class ImageController extends Controller
      */
     public function destroy($id)
     {
-        //DBの画像削除をする前にStrage内の画像削除
         $image = Image::findOrFail($id);
+        //①選択した画像がimage1~4のどこかで使われているのかを調べる
+        $imageInProducts = Product::where('image1', $image->id)
+        ->orWhere('image2', $image->id)
+        ->orWhere('image3', $image->id)
+        ->orWhere('image4', $image->id)
+        ->get();
+        //②どっかで使われていたらif文内の処理が回る
+        if($imageInProducts){//imageID=1の画像がimage1~4の全てで登録されている可能性もあるので配列とする
+            $imageInProducts->each(function($product) use($image){//配列に格納された写真たち全員に処理を当てる
+                //その格納された要素(e)たちを今回は$productとして要素にして渡す
+                //「要素とは別の」変数を渡したいのでuse()に必要なものを入れる
+                if($product->image1 === $image->id){
+                    //入ってきた要素のimage1の枠(product->image1)と$image一覧のidを検査し
+                    $product->image1 = null;//使われていたらnullを入れる
+                    $product->save();//保存できる
+                }
+                //画像2~4の場合もやる
+                if($product->image2 === $image->id){
+                    $product->image2 = null;
+                    $product->save();
+                }
+                if($product->image3 === $image->id){
+                    $product->image3 = null;
+                    $product->save();
+                }
+                if($product->image4 === $image->id){
+                    $product->image4 = null;
+                    $product->save();
+                }
+            });
+        }
+
         $filePath = $image->filename;
+
+        //DBの画像削除をする前にStrage内の画像削除
+        //画像を消す前に商品画像として使われていないかをチェックする。使われていたらnullを代入するようにする
         //一応$filePathに値がないとまずいので処理しておく
         if(Storage::exists($filePath)){
             Storage::delete($filePath);//ここでStorage削除
