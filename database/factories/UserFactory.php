@@ -7,14 +7,11 @@ use Illuminate\Support\Str;
 
 class UserFactory extends Factory
 {
-    /**
-     * Define the model's default state.
-     *
-     * @return array
-     */
+    protected $model = User::class;
+
     public function definition()
     {
-        return [
+        return [//fakerを使ってダミーデータを作成
             'name' => $this->faker->name(),
             'email' => $this->faker->unique()->safeEmail(),
             'email_verified_at' => now(),
