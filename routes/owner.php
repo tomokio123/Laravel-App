@@ -64,6 +64,7 @@ Route::get('/dashboard', function () {;
 
 Route::middleware('guest')->group(function () {
     //Route::get or post()と書く。(URL, [コントローラー名, コントローラー内のメソッド名])の順で書く
+    //ここさっきコメントアウト
     //Route::get('register', [RegisteredUserController::class, 'create'])
     //            ->name('register');
 

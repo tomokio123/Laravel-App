@@ -18,7 +18,7 @@ class RouteServiceProvider extends ServiceProvider
      *
      * @var string
      */
-    public const HOME = '/dashboard';//デフォルトがこれ。ユーザがログインしたらDashBordにリダイレクトされる」って意味。パス指定
+    public const HOME = '/';//デフォルトがこれ。ユーザがログインしたら/(index)にリダイレクトされる」って意味。パス指定
     public const OWNER_HOME = "/owner/dashboard";
     public const ADMIN_HOME = "/admin/dashboard";
     //Http/Middleware/RedirectIfAuthenticated.phpなどで使う

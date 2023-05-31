@@ -39,6 +39,7 @@ class RegisteredUserController extends Controller
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
 
+        //もしユーザーの項目を増やしたいならモデルのfillableに項目追加したりした後にここも編集しないといけない
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,

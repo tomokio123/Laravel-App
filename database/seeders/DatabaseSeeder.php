@@ -30,6 +30,7 @@ class DatabaseSeeder extends Seeder
             CategorySeeder::class,
             //ProductSeeder::class,//これ後に書かんとあかん?
             //StockSeeder::class,
+            UserSeeder::class
         ]);
     }
 }

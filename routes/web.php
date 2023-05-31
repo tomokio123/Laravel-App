@@ -3,7 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ComponentTestController;
 use App\Http\Controllers\LifeCycleTestController;
-
+use App\Http\Controllers\User\ItemController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -21,10 +21,12 @@ Route::get('/', function () {
     return view('user.welcome');
 });
 
-//laravel breezeを入れると以下の/dashboardルートが生成される
-Route::get('/dashboard', function () {
-    return view('user.dashboard');
-})->middleware(['auth:users'])->name('dashboard');
+//商品一覧に飛ばすためのルート
+Route::middleware("auth:users")->group(function(){
+    Route::get("/", [ItemController::class, 'index'])
+    ->name('items.index');
+});
+
 //->middleware(['auth'])認証していたら」ってこと
 //middleware(['quest'])は、「まだログインしていない」って意味
 //name('register'); などとすることで、名前付きルートを作ることができる。
