@@ -49,6 +49,21 @@ class ImageSeeder extends Seeder
                 "filename" => "public/products/sample6.png",
                 "title" => null,
             ],
+            [
+                "owner_id" => 1,
+                "filename" => "public/products/sample7.png",
+                "title" => null,
+            ],
+            [
+                "owner_id" => 1,
+                "filename" => "public/products/traveler.jpeg",
+                "title" => null,
+            ],
+            [
+                "owner_id" => 1,
+                "filename" => "public/products/sample9.jpeg",
+                "title" => null,
+            ],
         ]);
     }
 }

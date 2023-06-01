@@ -21,10 +21,10 @@ class ProductFactory extends Factory
             'sort_order' => $this->faker->randomNumber,
             'shop_id' => $this->faker->numberBetween(1,2),
             'secondary_category_id' => $this->faker->numberBetween(1,6),
-            'image1' => $this->faker->numberBetween(1,6),
-            'image2' => $this->faker->numberBetween(1,6),
-            'image3' => $this->faker->numberBetween(1,6),
-            'image4' => $this->faker->numberBetween(1,6),
+            'image1' => $this->faker->numberBetween(1,8),
+            'image2' => $this->faker->numberBetween(1,8),
+            'image3' => $this->faker->numberBetween(1,8),
+            'image4' => $this->faker->numberBetween(1,8),
 
         ];
     }
