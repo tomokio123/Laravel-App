@@ -16,7 +16,7 @@
                     @foreach ($products as $product)
                     <div class="w-1/4 p-2 md:p-4">
                       {{--productにはIDが振られているので[主キー]、そのまま$product->idでOK--}}
-                      <a href=""> 
+                      <a href="{{ route("user.items.show", ['item' => $product->id]) }}"> x
                         <div class="border rounded-md p-4 max-h-30 bg-white-500">
                           {{--productの中にはfilenameが無いので一旦imageFirstに繋いであげる--}}
                           {{--//image1を設定してない場合はnullを入れることにしたので、ここでnull判定をする。文字列の場合は:filename->filenameと書き換える--}}

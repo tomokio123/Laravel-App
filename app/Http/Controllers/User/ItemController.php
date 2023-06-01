@@ -9,6 +9,26 @@ use Illuminate\Support\Facades\DB;
 
 class ItemController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware("auth:users");//オーナーログインに限る
+
+        //$this->middleware(function ($request, $next) {
+        //    //
+        //    $id = $request->route()->parameter("product");
+        //    if(!is_null($id)){//null判定
+        //        //product内にはOWnerは紐づいていないので一旦shopに行ってからowner特定してID取得する
+        //        $productsOwnerId = Product::findOrFail($id)->shop->owner->id;
+        //        $productId = (int)$productsOwnerId; //キャストして文字列を数字にした。
+        //        if($productId  !== Auth::id()){//同じでなかったら
+        //            abort(404); //404画面表示
+        //        }
+        //    }
+
+            //return $next($request);
+        //};
+    }
+
     public function index(){
 
         //stocksテーブルを(productIDごとに)グループ化→数量が1以上
@@ -45,5 +65,12 @@ class ItemController extends Controller
 
         //resource/viewsの中のuser/index.blade.phpのこと
         return view('user.index', compact('products'));
+    }
+
+    public function show($id)
+    {
+        $product = Product::findOrFail($id);
+
+        return view("user.show", compact("product"));
     }
 }

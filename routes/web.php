@@ -21,10 +21,12 @@ Route::get('/', function () {
     return view('user.welcome');
 });
 
-//商品一覧に飛ばすためのルート
+//userでガードをかけてからのそれぞれのItems系のルート指定
 Route::middleware("auth:users")->group(function(){
-    Route::get("/", [ItemController::class, 'index'])
-    ->name('items.index');
+    // to商品一覧
+    Route::get("/", [ItemController::class, 'index'])->name('items.index');
+    // to商品詳細
+    Route::get("show/{item}", [ItemController::class, 'show'])->name('items.show');
 });
 
 //->middleware(['auth'])認証していたら」ってこと
