@@ -61,7 +61,7 @@ class ItemController extends Controller
         'image1.filename as filename')//上でimage1はimageテーブルの別名としていて、
         //image1のfilenameをfilenameとして用いる
         ->get();//ここでselectした別名でviewで使うことになる($products->)
-        //dd($stocks, $products);
+        //dd($products);
 
         //resource/viewsの中のuser/index.blade.phpのこと
         return view('user.index', compact('products'));
@@ -70,6 +70,9 @@ class ItemController extends Controller
     public function show($id)
     {
         $product = Product::findOrFail($id);
+
+        //dd($product->shop->filename); //"public/shops/sample1.png"
+        //dd($product->imageFirst->filename); //"public/products/sample5.png"
 
         return view("user.show", compact("product"));
     }

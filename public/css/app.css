@@ -1233,6 +1233,10 @@ select {
   border-radius: 0.25rem;
 }
 
+.rounded-full {
+  border-radius: 9999px;
+}
+
 .rounded-lg {
   border-radius: 0.5rem;
 }
@@ -1428,6 +1432,11 @@ select {
 
 .fill-current {
   fill: currentColor;
+}
+
+.object-cover {
+  -o-object-fit: cover;
+     object-fit: cover;
 }
 
 .p-2 {

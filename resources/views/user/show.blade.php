@@ -17,9 +17,51 @@
                         <!-- Additional required wrapper -->
                         <div class="swiper-wrapper">
                           <!-- Slides -->
-                          <div class="swiper-slide"><img src="{{ \Storage::url("public/products/sample1.png") }}"></div>
-                          <div class="swiper-slide">Slide 2</div>
-                          <div class="swiper-slide">Slide 3</div>
+                          <div class="swiper-slide">
+                            @php
+                              $filename = $product->imageFirst->filename;
+                              $replacedFilename = str_replace('public/products/', 'storage/products/', $filename); 
+                            @endphp
+                            @if ($filename !== null)
+                            <img class="mx-auto w-30 h-30 object-cover" src="{{ asset($replacedFilename) }}">
+                            @else
+                            <img src="{{ asset("images/noimage.jpeg") }}">
+                            @endif
+                          </div>
+                          <div class="swiper-slide">
+                            @php
+                              $filename = $product->imageSecond->filename;
+                              $replacedFilename = str_replace('public/products/', 'storage/products/', $filename); 
+                            @endphp
+                            @if ($filename !== null)
+                            <img class="mx-auto w-30 h-30 object-cover" src="{{ asset($replacedFilename) }}">
+                            @else
+                            <img src="{{ asset("images/noimage.jpeg") }}">
+                            @endif
+                          </div>
+                          <div class="swiper-slide">
+                            @php
+                              $filename = $product->imageThird->filename;
+                              $replacedFilename = str_replace('public/products/', 'storage/products/', $filename); 
+                            @endphp
+                            @if ($filename !== null)
+                            <img class="mx-auto w-30 h-30 object-cover" src="{{ asset($replacedFilename) }}">
+                            @else
+                            <img src="{{ asset("images/noimage.jpeg") }}">
+                            @endif
+                          </div>
+                          <div class="swiper-slide">
+                            @php
+                              $filename = $product->imageFourth->filename;
+                              $replacedFilename = str_replace('public/products/', 'storage/products/', $filename); 
+                            @endphp
+                            @if ($filename !== null)
+                            <img class="mx-auto w-30 h-30 object-cover rounded-full" src="{{ asset($replacedFilename) }}">
+                            @else
+                            <img src="{{ asset("images/noimage.jpeg") }}">
+                            @endif
+                          </div>
+                          
                           ...
                         </div>
                         <!-- If we need pagination -->
