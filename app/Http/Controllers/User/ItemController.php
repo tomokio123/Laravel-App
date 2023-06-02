@@ -5,6 +5,7 @@ namespace App\Http\Controllers\User;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Product;
+use App\Models\Stock;
 use Illuminate\Support\Facades\DB;
 
 class ItemController extends Controller
@@ -71,9 +72,17 @@ class ItemController extends Controller
     {
         $product = Product::findOrFail($id);
 
+        //在庫量(の合計)取得
+        $quantity = Stock::where('product_id', $product->id)
+        ->sum('quantity');
+
+        if($quantity > 9){
+            $quantity = 9;
+        }
+
         //dd($product->shop->filename); //"public/shops/sample1.png"
         //dd($product->imageFirst->filename); //"public/products/sample5.png"
 
-        return view("user.show", compact("product"));
+        return view("user.show", compact("product", "quantity"));
     }
 }
