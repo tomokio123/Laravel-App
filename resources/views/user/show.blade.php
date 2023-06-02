@@ -83,7 +83,8 @@
                         <div>
                           <span class="title-font font-medium text-2xl text-gray-900">{{ number_format($product->price) }}</span><span class="text-sm text-gray-700">円(税込)</span>
                         </div>
-                          <form method="post" action="">
+                          <form method="post" action="{{ route("user.cart.add") }}">
+                             {{--action属性にrouteを定義し、method属性にHTTP動詞を定義--}}
                             <div class="flex justify-around items-center">
                               @csrf
                             <div class="flex justify-around items-center">
@@ -100,6 +101,7 @@
                             </div>
                             <button class="flex ml-auto text-white-500 bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded">カートに入れる</button>
                             <input type="hidden" name="product_id" value="{{ $product->id }}">
+                            {{--typeがhiddenのinputを用意することで、$product->idの情報も渡せる--}}
                             </div>
                           </form>
                     

@@ -55,7 +55,7 @@ class RouteServiceProvider extends ServiceProvider
                 ->namespace($this->namespace)
                 ->group(base_path('routes/admin.php'));
             //userのルーティング設定
-            Route::prefix("/")
+            Route::prefix("/")//[/]というprefixが付いたらuser.を前につけた状態でroute定義する
                 ->as("user.")
                 ->middleware('web')
                 ->namespace($this->namespace)

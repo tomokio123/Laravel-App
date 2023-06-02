@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ComponentTestController;
 use App\Http\Controllers\LifeCycleTestController;
 use App\Http\Controllers\User\ItemController;
+use App\Http\Controllers\User\CartController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -27,6 +28,13 @@ Route::middleware("auth:users")->group(function(){
     Route::get("/", [ItemController::class, 'index'])->name('items.index');
     // to商品詳細
     Route::get("show/{item}", [ItemController::class, 'show'])->name('items.show');
+});
+
+//cart系のroute定義
+Route::prefix("cart")->middleware("auth:users")//userのガードかける。
+->group(function(){
+    Route::post("add", [CartController::class, 'add'])//Dbに保存するのでPOST
+    ->name('cart.add');
 });
 
 //->middleware(['auth'])認証していたら」ってこと
