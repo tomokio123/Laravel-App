@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers\User;
 
+//require_once 'vendor/autoload.php';
+//require_once '/vendor/to/stripe-php/init.php';
+require_once '../vendor/autoload.php';
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Cart;
@@ -47,6 +50,7 @@ class CartController extends Controller
 
         //dd($products, $totalPrice);
 
+        //$this->checkout();
         return view('user.cart', compact("products", "totalPrice"));
     }
 
@@ -59,5 +63,50 @@ class CartController extends Controller
 
         //リダイレクトはcart.index
         return redirect()->route("user.cart.index");
+    }
+
+    public function checkout()
+    {
+        $user = User::findOrFail(Auth::id());//Auth::idでログインしているUser情報取得
+        $products = $user->products;//userに紐づくproductsを取得
+
+        $lineItems = [];//カートに入っている情報を格納する配列を用意
+        foreach($products as $product){
+            $lineItem = [
+                "quantity" => $product->pivot->quantity,
+                "price_data" => [
+                    "unit_amount" => $product->price,
+                    "currency" => "jpy",
+                    "product_data" => [
+                        "name" => $product->name,
+                        "description" => $product->information
+                    ],
+                ],
+            ];
+            array_push($lineItems, $lineItem);//配列に追加
+            //array_push(追加先の配列, 追加する値)
+
+        }
+
+        \Stripe\Stripe::setApiKey('sk_test_xxx');
+        //dd($lineItems);
+        //\Stripe\Stripe::setApiKey(config('stripe.stripe_secret_key'));
+        $stripe = new \Stripe\StripeClient(env("STRIPE_SECRET_KEY"));
+        // \Stripe\StripeClient::setApiKey(env("STRIPE_SECRET_KEY"));//秘密鍵設定
+        $session = $stripe->checkout->sessions->create([
+            "line_items" => [$lineItems],
+            "mode" => "payment",
+            "success_url" => route("user.items.index"),
+            "cancel_url" => route("user.cart.index"),
+            'payment_method_types' => ['card'],
+        ]);
+
+        $publicKey = env("STRIPE_PUBLIC_KEY");
+
+        echo $session;
+
+        return view("user.checkout", compact("session", "publicKey"));
+
+        //$stripe->checkout->sessions->create
     }
 }

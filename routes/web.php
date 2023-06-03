@@ -39,6 +39,10 @@ Route::prefix("cart")->middleware("auth:users")//userのガードかける。
     ->name('cart.index');//index=>get
     Route::post("delete{item}", [CartController::class, 'delete'])//Dbに保存するのでPOST
     ->name('cart.delete');//delete=>post,delete時には消すIdを渡してあげる必要あり、{ルートパラメータ} として渡す
+
+    //決済のルート(動詞:get) chckoutメソッド
+    Route::get("checkout" , [CartController::class, "checkout"])
+    ->name("cart.checkout");
 });
 
 //->middleware(['auth'])認証していたら」ってこと
