@@ -35,6 +35,8 @@ Route::prefix("cart")->middleware("auth:users")//userのガードかける。
 ->group(function(){
     Route::post("add", [CartController::class, 'add'])//Dbに保存するのでPOST
     ->name('cart.add');
+    Route::get("/", [CartController::class, 'index'])//Dbに保存するのでPOST
+    ->name('cart.index');
 });
 
 //->middleware(['auth'])認証していたら」ってこと

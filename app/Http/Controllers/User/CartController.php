@@ -5,6 +5,7 @@ namespace App\Http\Controllers\User;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Cart;
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 
 class CartController extends Controller
@@ -16,7 +17,7 @@ class CartController extends Controller
         //Cartテーブルのproduct_idが$requestで渡ってくるproduct_idと等しいとき、かつ
         ->where('user_id', Auth::id())//Cartテーブルのuser_idと今ログインしているidが等しいとき
         ->first();//firstで「一件だけ」取得する
-        
+
         if($itemInCart){//itemInCartに値が入っているとき
             //左辺が現在のカートの中の個数 += リクエストで増減値が送られてくるので右辺でそれを反映
             $itemInCart->quantity += $request->quantity;
@@ -28,6 +29,24 @@ class CartController extends Controller
                 "quantity" => $request->quantity
             ]);
         }
-        dd("TEST");
+
+        return redirect()->route("user.cart.index");
+    }
+
+    public function index()
+    {
+        $user = User::findOrFail(Auth::id());//Auth::idでログインしているUser情報取得
+        $products = $user->products;//userに紐づくproductsを取得
+        $totalPrice = 0;
+
+        foreach($products as $product){
+            //「$productのprice」に「$productに紐づく中間テーブル(cartsテーブル)のquantity(カート量)」をかける
+            //それをtotalPriceに上乗せ(+=)する
+            $totalPrice += $product->price * $product->pivot->quantity;
+        }
+
+        //dd($products, $totalPrice);
+
+        return view('user.cart', compact("products", "totalPrice"));
     }
 }
