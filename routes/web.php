@@ -34,9 +34,11 @@ Route::middleware("auth:users")->group(function(){
 Route::prefix("cart")->middleware("auth:users")//userのガードかける。
 ->group(function(){
     Route::post("add", [CartController::class, 'add'])//Dbに保存するのでPOST
-    ->name('cart.add');
+    ->name('cart.add');//add=>post
     Route::get("/", [CartController::class, 'index'])//Dbに保存するのでPOST
-    ->name('cart.index');
+    ->name('cart.index');//index=>get
+    Route::post("delete{item}", [CartController::class, 'delete'])//Dbに保存するのでPOST
+    ->name('cart.delete');//delete=>post,delete時には消すIdを渡してあげる必要あり、{ルートパラメータ} として渡す
 });
 
 //->middleware(['auth'])認証していたら」ってこと

@@ -49,4 +49,15 @@ class CartController extends Controller
 
         return view('user.cart', compact("products", "totalPrice"));
     }
+
+    public function delete($id)
+    //この$idは「商品ID」を想定。$idにはルートパラメータ{item}として渡ってくるように定義した。
+    {
+        Cart::where("product_id", $id)//送られてくるidと商品IDが同じで、かつ、
+        ->where("user_id", Auth::id())//Cartテーブルのuser_idと現在ログインしてるIDが等しいデータを取得し、
+        ->delete();//delete
+
+        //リダイレクトはcart.index
+        return redirect()->route("user.cart.index");
+    }
 }
