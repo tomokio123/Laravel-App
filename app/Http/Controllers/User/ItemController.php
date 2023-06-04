@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Product;
 use App\Models\Stock;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 
 class ItemController extends Controller
 {
@@ -14,20 +15,23 @@ class ItemController extends Controller
     {
         $this->middleware("auth:users");//オーナーログインに限る
 
-        //$this->middleware(function ($request, $next) {
-        //    //
-        //    $id = $request->route()->parameter("product");
-        //    if(!is_null($id)){//null判定
-        //        //product内にはOWnerは紐づいていないので一旦shopに行ってからowner特定してID取得する
-        //        $productsOwnerId = Product::findOrFail($id)->shop->owner->id;
-        //        $productId = (int)$productsOwnerId; //キャストして文字列を数字にした。
-        //        if($productId  !== Auth::id()){//同じでなかったら
-        //            abort(404); //404画面表示
-        //        }
-        //    }
+        $this->middleware(function ($request, $next) {
+            //販売されていない商品の閲覧防止のために以下も記述
+            //リクエスト情報からルートの「ルートパラメータ」["item"]を参照する。
+            $id = $request->route()->parameter("item");//ルートパラメーター->web.phpの"show/{item}"の部分
+            //そのルートパラメータがnullでない時のみ処理。
+            if(!is_null($id)){//null判定。itemが渡ってきたライカの処理。そのidで販売停止の物等のチェックをかけたい
+                //availableItemsが存在するかどうかを確かめるのでProduct::availableItems()から引っ張る
+                //getでもいいが、where()の条件に当てはまるのが存在するかどうかを確かめれる(true/falseを返せる)existsを使う
+                //"products.id"がルートパラメータと$idが等しくなるものが存在していればtrueを返す
+                $itemId = Product::availableItems()->where("products.id", $id)->exists();
+                if(!$itemId){//$itemIdが存在していなかったら
+                    abort(404); //404画面表示
+                }
+            }
 
-            //return $next($request);
-        //};
+            return $next($request);
+        });
     }
 
     public function index()
