@@ -1,5 +1,5 @@
 <?php
-
+//いわゆる「エントリーポイント」
 use Illuminate\Contracts\Http\Kernel;
 use Illuminate\Http\Request;
 
@@ -32,6 +32,7 @@ if (file_exists($maintenance = __DIR__.'/../storage/framework/maintenance.php'))
 */
 
 require __DIR__.'/../vendor/autoload.php';
+//クラスをすべて読み込む。requireなしで別ファイルのクラスを利用可能
 
 /*
 |--------------------------------------------------------------------------
@@ -44,12 +45,13 @@ require __DIR__.'/../vendor/autoload.php';
 |
 */
 
-$app = require_once __DIR__.'/../bootstrap/app.php';
+$app = require_once __DIR__.'/../bootstrap/app.php';//その他、様々な機能が読み込まれている
 
-$kernel = $app->make(Kernel::class);
+$kernel = $app->make(Kernel::class);//カーネルをサービスコンテナに登録
 
 $response = $kernel->handle(
+    //handleメソッドでrequestを設定している
     $request = Request::capture()
 )->send();
 
-$kernel->terminate($request, $response);
+$kernel->terminate($request, $response);//request/reaponse共に削除しておく

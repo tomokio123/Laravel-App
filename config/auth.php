@@ -14,7 +14,7 @@ return [
     */
 
     'defaults' => [
-        'guard' => 'web',
+        'guard' => 'users',//ガードのデフォルト設定。['users'(キー)をデフォルトに設定]
         'passwords' => 'users',
     ],
 
@@ -40,6 +40,18 @@ return [
             'driver' => 'session',
             'provider' => 'users',
         ],
+        'users' => [
+            'driver' => 'session',
+            'provider' => 'users',
+        ],
+        'owners' => [
+            'driver' => 'session',
+            'provider' => 'owners',//[ownerモデルから取ってくる]
+        ],
+        'admin' => [
+            'driver' => 'session',
+            'provider' => 'admin',
+        ],
     ],
 
     /*
@@ -63,6 +75,14 @@ return [
         'users' => [
             'driver' => 'eloquent',
             'model' => App\Models\User::class,
+        ],
+        'owners' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\Owner::class,
+        ],
+        'admin' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\Admin::class,
         ],
 
         // 'users' => [
@@ -89,7 +109,20 @@ return [
     'passwords' => [
         'users' => [
             'provider' => 'users',
+            //providerは上の箇所で設定した名前にする
             'table' => 'password_resets',
+            'expire' => 60,//期限
+            'throttle' => 60,//失敗時のログイン禁止時間(秒)
+        ],
+        'owners' => [
+            'provider' => 'owners',//上記のprovidersの名前
+            'table' => 'owner_password_resets',//テーブル名を指定
+            'expire' => 60,
+            'throttle' => 60,
+        ],
+        'admin' => [
+            'provider' => 'admin',//上記のprovidersの名前
+            'table' => 'admin_password_resets',
             'expire' => 60,
             'throttle' => 60,
         ],
