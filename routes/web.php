@@ -22,7 +22,7 @@ Route::get('/', function () {
     return view('user.welcome');
 });
 
-//userでガードをかけてからのそれぞれのItems系のルート指定
+//userでガードをかけてからのそれぞれの商品(Items)一覧系のルート指定
 Route::middleware("auth:users")->group(function(){
     // to商品一覧
     Route::get("/", [ItemController::class, 'index'])->name('items.index');
