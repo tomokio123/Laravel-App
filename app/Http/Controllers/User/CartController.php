@@ -8,6 +8,8 @@ require_once '../vendor/autoload.php';
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Cart;
+use App\Consts\PrefectureConst;
+use App\Models\Stock;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 
@@ -38,6 +40,7 @@ class CartController extends Controller
 
     public function index()
     {
+        //dd(PrefectureConst::LIST["reduce"]);
         $user = User::findOrFail(Auth::id());//Auth::idでログインしているUser情報取得
         $products = $user->products;//userに紐づくproductsを取得
         $totalPrice = 0;
@@ -71,24 +74,36 @@ class CartController extends Controller
         $products = $user->products;//userに紐づくproductsを取得
 
         $lineItems = [];//カートに入っている情報を格納する配列を用意
+        //在庫を確認し、決済前に在庫を減らしておく=>決済前に在庫を確認し、
         foreach($products as $product){
-            $lineItem = [
-                "quantity" => $product->pivot->quantity,
-                "price_data" => [
-                    "unit_amount" => $product->price,
-                    "currency" => "jpy",
-                    "product_data" => [
-                        "name" => $product->name,
-                        "description" => $product->information
+            $quantity = "";
+            //「決済前」の在庫を確認して保持しておく
+            $quantity = Stock::where("product_id", $product->id)->sum("quantity");
+
+            //Cartの量より「決済前在庫」が多かったらもう買えないのでindexへ強制送還する
+            if($product->pivot->quantity > $quantity){
+                //ここはreturn viewではない。indexメソッド内の変数もviewに渡す必要があるため
+                return redirect()->route("user.cart.index");
+            } else {
+                //在庫が余裕あったらlineItemに情報を格納していく
+                $lineItem = [
+                    "quantity" => $product->pivot->quantity,
+                    "price_data" => [
+                        "unit_amount" => $product->price,
+                        "currency" => "jpy",
+                        "product_data" => [
+                            "name" => $product->name,
+                            "description" => $product->information
+                        ],
                     ],
-                ],
-            ];
-            array_push($lineItems, $lineItem);//配列に追加
-            //array_push(追加先の配列, 追加する値)
+                ];
+                array_push($lineItems, $lineItem);//配列に追加
+                //array_push(追加先の配列, 追加する値)
+            }
 
         }
 
-        \Stripe\Stripe::setApiKey('sk_test_xxx');
+        //\Stripe\Stripe::setApiKey('sk_test_xxx');
         //dd($lineItems);
         //\Stripe\Stripe::setApiKey(config('stripe.stripe_secret_key'));
         $stripe = new \Stripe\StripeClient(env("STRIPE_SECRET_KEY"));
@@ -101,9 +116,18 @@ class CartController extends Controller
             'payment_method_types' => ['card'],
         ]);
 
+        //Stripeで決済する前に先にStockテーブルの在庫を減らしておく
+        foreach($products as $product){
+            Stock::create([
+                'product_id' => $product->id,
+                'type' => PrefectureConst::LIST["reduce"],//2
+                'quantity' => $product->pivot->quantity * -1,//変化量。
+            ]);
+        }
+        
         $publicKey = env("STRIPE_PUBLIC_KEY");
 
-        echo $session;
+        //echo $session;
 
         return view("user.checkout", compact("session", "publicKey"));
 
