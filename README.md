@@ -1,6 +1,8 @@
 ## インストール後の実施事項
 - 画像のダミーデータは public/imagesフォルダ内に sample1.jpg 〜 sample6.jpg として保存
-
+- composer install または composer update
+- npm install
+- npm run dev
 `php artisan storage:link `で storageフォルダにリンク後、
 
 storage/app/public/productsフォルダ内に保存すると表示される。 (productsフォルダがない場合は作成)
