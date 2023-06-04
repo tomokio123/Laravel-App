@@ -112,7 +112,7 @@ class CartController extends Controller
             "line_items" => [$lineItems],
             "mode" => "payment",
             "success_url" => route("user.cart.success"),//successメソッド呼び出す
-            "cancel_url" => route("user.cart.index"),
+            "cancel_url" => route("user.cart.cancel"),//cancelメソッド呼び出す
             'payment_method_types' => ['card'],
         ]);
 
@@ -138,5 +138,21 @@ class CartController extends Controller
     {
         Cart::where("user_id", Auth::id())->delete();//カートの情報を消す
         return redirect()->route("user.items.index");//商品一覧に戻す
+    }
+
+    public function cancel()
+    {
+        $user = User::findOrFail(Auth::id());//ユーザ情報取得
+
+        foreach($user->products as $product){
+            Stock::create([
+                'product_id' => $product->id,
+                'type' => PrefectureConst::LIST["add"],//1(+)
+                'quantity' => $product->pivot->quantity,
+                //(+の)変化量。カートから購入する直前に減らしていたが、キャンセルされたので戻してあげる処理
+            ]);
+        }
+
+        return redirect()->route("user.cart.index");//カートに戻す
     }
 }

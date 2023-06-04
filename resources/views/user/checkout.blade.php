@@ -6,9 +6,9 @@
 
   window.onload = function() {
     stripe.redirectToCheckout({//checkoutへとばす
-      sessionId: "{{ $session->id }}"//cartControllerでcreateしていたsession情報
-    }).then(function (result) {
-      window.location.href = "{{ route('user.cart.index') }}"
+      sessionId: "{{ $session->id }}"//cartControllerでcreateしていたsession情報を渡す
+    }).then(function (result) {//もしエラーが出たらcart.cancelに渡す
+      window.location.href = "{{ route('user.cart.cancel') }}"
     });
   }
 </script>

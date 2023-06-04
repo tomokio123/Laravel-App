@@ -46,6 +46,9 @@ Route::prefix("cart")->middleware("auth:users")//userのガードかける。
     //決済successメソッド
     Route::get("success" , [CartController::class, "success"])
     ->name("cart.success");
+    //決済cancelメソッド
+    Route::get("cancel" , [CartController::class, "cancel"])
+    ->name("cart.cancel");
 });
 
 //->middleware(['auth'])認証していたら」ってこと
