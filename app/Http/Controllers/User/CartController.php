@@ -111,7 +111,7 @@ class CartController extends Controller
         $session = $stripe->checkout->sessions->create([
             "line_items" => [$lineItems],
             "mode" => "payment",
-            "success_url" => route("user.items.index"),
+            "success_url" => route("user.cart.success"),//successメソッド呼び出す
             "cancel_url" => route("user.cart.index"),
             'payment_method_types' => ['card'],
         ]);
@@ -132,5 +132,11 @@ class CartController extends Controller
         return view("user.checkout", compact("session", "publicKey"));
 
         //$stripe->checkout->sessions->create
+    }
+
+    public function success()
+    {
+        Cart::where("user_id", Auth::id())->delete();//カートの情報を消す
+        return redirect()->route("user.items.index");//商品一覧に戻す
     }
 }

@@ -43,6 +43,9 @@ Route::prefix("cart")->middleware("auth:users")//userのガードかける。
     //決済のルート(動詞:get) chckoutメソッド
     Route::get("checkout" , [CartController::class, "checkout"])
     ->name("cart.checkout");
+    //決済successメソッド
+    Route::get("success" , [CartController::class, "success"])
+    ->name("cart.success");
 });
 
 //->middleware(['auth'])認証していたら」ってこと
