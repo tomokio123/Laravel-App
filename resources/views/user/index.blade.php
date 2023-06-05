@@ -43,7 +43,28 @@ use Illuminate\Http\Request;
                   </option>
                 </select>
               </div>
-              <div>あんど件数</div>
+              <div>
+                <span class="text-sm">表示件数</span><br>
+                {{--下のjsで呼び出す時のgetElement指定しているIDがここのid=のところ--}}
+                <select id="pagination" name="pagination">
+                  {{--(selectタグのnameが)キー、(optionタグのvalueが)バリュー、の関係になっている--}}
+                  <option value="20"
+                      @if(\Request::get('pagination') === '20')
+                      selected
+                      @endif>20件
+                  </option>
+                  <option value="50"
+                      @if(\Request::get('pagination') === '50')
+                      selected
+                      @endif>50件
+                  </option>
+                  <option value="100"
+                      @if(\Request::get('pagination') === '100')
+                      selected
+                      @endif>100件
+                  </option>
+                </select>
+              </div>
             </div>
           </form>
         </div>
@@ -81,6 +102,12 @@ use Illuminate\Http\Request;
                     @endforeach
                   {{--@endforeach--}}
                 </div>
+                {{--ページネーション表示--}}
+                {{--getパラメータのソート順がページネーション時に戻ってしまうのでそこを修正するためにappendsを噛ませる--}}
+                {{ $products->appends([
+                  'sort' => \Request::get("sort"),
+                 "pagination" => \Request::get("pagination")
+                ])->links() }}
               </div>
           </div>
       </div>
@@ -92,5 +119,10 @@ use Illuminate\Http\Request;
       this.form.submit() 
       //thisはここではselectオブジェクトのことなはず(this = 「自分自身」なので、「自分自身の他のオブジェクトメソッドを使用する」の意味だと思う)
     }) //jsで間違えていたら動かなかったので注意
+
+    const paginate = document.getElementById('pagination') //selectタグ内にあるid='pagination'の箇所を指す
+    paginate.addEventListener("change", function(){
+      this.form.submit() 
+    }) 
   </script>
 </x-app-layout>

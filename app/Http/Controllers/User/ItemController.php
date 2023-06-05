@@ -38,7 +38,10 @@ class ItemController extends Controller
     {
         //スコープにまとめた()
         //dd($request);
-        $products = Product::availableItems()->sortOrder($request->sort)->get();
+        $products = Product::availableItems()
+        ->sortOrder($request->sort)
+        ->paginate($request->pagination);
+        //->getではなく->とすることでgetする且つ、ページネーションも可能にする
         //available(scope)で販売可能商品を判定し->sortOrder($request->sort)でsort順の指定値を渡す
 
         //resource/viewsの中のuser/index.blade.phpのこと
