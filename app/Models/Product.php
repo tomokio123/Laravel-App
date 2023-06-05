@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Consts\PrefectureConst;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Shop;
@@ -94,5 +95,25 @@ class Product extends Model
         ,'products.sort_order as sort_order'
         ,'products.information', 'secondary_categories.name as category'
         ,'image1.filename as filename');
+    }
+
+    public function scopeSortOrder($query, $sortOrder)
+    {
+        //渡ってくるsort_orderがnull・recommendの場合はsort_order順(デフォルトのsort_order)に並べる
+        if($sortOrder === null || $sortOrder === PrefectureConst::SORT_ORDER["recommend"]){
+            return $query->orderBy("sort_order", "asc");
+        }
+        if($sortOrder === PrefectureConst::SORT_ORDER["higherPrice"]){
+            return $query->orderBy("price", "desc");
+        }
+        if($sortOrder === PrefectureConst::SORT_ORDER["lowerPrice"]){
+            return $query->orderBy("price", "asc");
+        }
+        if($sortOrder === PrefectureConst::SORT_ORDER["later"]){
+            return $query->orderBy("products.created_at", "desc");//productsテーブルのcreated_at順に並べる
+        }//この辺の呼び出し名は上のscopeAvailableItemsで呼び出した時のasやネーミングによる。
+        if($sortOrder === PrefectureConst::SORT_ORDER["older"]){
+            return $query->orderBy("products.created_at", "asc");
+        }
     }
 }

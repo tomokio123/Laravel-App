@@ -34,10 +34,12 @@ class ItemController extends Controller
         });
     }
 
-    public function index()
+    public function index(Request $request)
     {
         //スコープにまとめた()
-        $products = Product::availableItems()->get();
+        //dd($request);
+        $products = Product::availableItems()->sortOrder($request->sort)->get();
+        //available(scope)で販売可能商品を判定し->sortOrder($request->sort)でsort順の指定値を渡す
 
         //resource/viewsの中のuser/index.blade.phpのこと
         return view('user.index', compact('products'));
