@@ -40,7 +40,7 @@ class ItemController extends Controller
         //dd($request);
         $products = Product::availableItems()
         ->sortOrder($request->sort)
-        ->paginate($request->pagination);
+        ->paginate($request->pagination ?? "20");//??(nullチェックしてnullなら20をデフォにした)
         //->getではなく->とすることでgetする且つ、ページネーションも可能にする
         //available(scope)で販売可能商品を判定し->sortOrder($request->sort)でsort順の指定値を渡す
 
