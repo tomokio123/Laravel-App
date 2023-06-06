@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Product;
 use App\Models\Stock;
+use App\Models\PrimaryCategory;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 
@@ -36,16 +37,22 @@ class ItemController extends Controller
 
     public function index(Request $request)
     {
-        //スコープにまとめた()
+        //スコープにまとめた
         //dd($request);
         $products = Product::availableItems()
+        ->selectCategory($request->category ?? "0")//nullならデフォルトカテゴリ(0="recommend")
         ->sortOrder($request->sort)
         ->paginate($request->pagination ?? "20");//??(nullチェックしてnullなら20をデフォにした)
         //->getではなく->とすることでgetする且つ、ページネーションも可能にする
         //available(scope)で販売可能商品を判定し->sortOrder($request->sort)でsort順の指定値を渡す
 
+        //リレーション先の情報を取ってくるときはN+1問題→Eager Loadingを行え
+        //PrimaryCategoryモデル内のsecondary()のこと↓
+        $categories = PrimaryCategory::with('secondary')
+        ->get();
+
         //resource/viewsの中のuser/index.blade.phpのこと
-        return view('user.index', compact('products'));
+        return view('user.index', compact('products', 'categories'));
     }
 
     public function show($id)

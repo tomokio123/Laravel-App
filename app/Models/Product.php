@@ -97,6 +97,7 @@ class Product extends Model
         ,'image1.filename as filename');
     }
 
+    //表示順で絞り込むスコープを定義
     public function scopeSortOrder($query, $sortOrder)
     {
         //渡ってくるsort_orderがnull・recommendの場合はsort_order順(デフォルトのsort_order)に並べる
@@ -114,6 +115,17 @@ class Product extends Model
         }//この辺の呼び出し名は上のscopeAvailableItemsで呼び出した時のasやネーミングによる。
         if($sortOrder === PrefectureConst::SORT_ORDER["older"]){
             return $query->orderBy("products.created_at", "asc");
+        }
+    }
+
+    //カテゴリで絞り込むスコープを定義
+    public function scopeSelectCategory($query , $categoryId)
+    {
+        if($categoryId !== "0") {
+            //Productテーブルのsecondary_category_idカラム
+            return $query->where("secondary_category_id", $categoryId);
+        } else {
+            return ;
         }
     }
 }
