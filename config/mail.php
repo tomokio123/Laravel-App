@@ -82,7 +82,7 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Global "From" Address
+    | Global "From" Address = メールの送信元
     |--------------------------------------------------------------------------
     |
     | You may wish for all e-mails sent by your application to be sent from

@@ -8,6 +8,8 @@ use App\Models\Product;
 use App\Models\Stock;
 use App\Models\PrimaryCategory;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;//メールファサード読み込まないと送信できない
+use App\Mail\TestMail; //TestMailをインポート
 use Illuminate\Support\Facades\Auth;
 
 class ItemController extends Controller
@@ -37,8 +39,10 @@ class ItemController extends Controller
 
     public function index(Request $request)
     {
+        Mail::to("abeazpon@gmail.com")//Mail::toメソッドで送信先を指定し、
+        ->send(new TestMail());//send()メソッドで送信(と送信の内容を記述しているクラスを指定)
+
         //スコープにまとめた
-        //dd($request);
         $products = Product::availableItems()
         ->selectCategory($request->category ?? "0")//nullならデフォルトカテゴリ(0="recommend")
         ->searchKeyword($request->keyword)//検索の場合はここでnull判定はしない
