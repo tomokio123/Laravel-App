@@ -41,6 +41,7 @@ class ItemController extends Controller
         //dd($request);
         $products = Product::availableItems()
         ->selectCategory($request->category ?? "0")//nullならデフォルトカテゴリ(0="recommend")
+        ->searchKeyword($request->keyword)//検索の場合はここでnull判定はしない
         ->sortOrder($request->sort)
         ->paginate($request->pagination ?? "20");//??(nullチェックしてnullなら20をデフォにした)
         //->getではなく->とすることでgetする且つ、ページネーションも可能にする

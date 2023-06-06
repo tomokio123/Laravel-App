@@ -124,6 +124,25 @@ class Product extends Model
         if($categoryId !== "0") {
             //Productテーブルのsecondary_category_idカラム
             return $query->where("secondary_category_id", $categoryId);
+        } else {//categoryidが"0"(="recommend" or null)の時は絞り込むことはしない
+            return ;
+        }
+    }
+
+    //キーワードで絞り込むスコープを定義
+    public function scopeSearchKeyword($query , $keyword)
+    {
+        if(!is_null($keyword)) {
+            //全角スペースを半角に
+            $spaceConvert = mb_convert_kana($keyword, "s");
+            //空白で区切る
+            $keywords = preg_split("/[\s]+/", $spaceConvert,-1,PREG_SPLIT_NO_EMPTY);
+            //単語をループで回す
+            foreach($keywords as $word){
+                //曖昧検索:文字列の前後に%をつける
+                $query->where("products.name", "like", "%".$word."%");
+            }
+            return $query;
         } else {
             return ;
         }
