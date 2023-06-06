@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;//メールファサード読み込まないと送信できない
 use App\Mail\TestMail; //TestMailをインポート
 use Illuminate\Support\Facades\Auth;
+use App\Jobs\SendThanksMail;//ありがとうメール
 
 class ItemController extends Controller
 {
@@ -39,8 +40,15 @@ class ItemController extends Controller
 
     public function index(Request $request)
     {
-        Mail::to("abeazpon@gmail.com")//Mail::toメソッドで送信先を指定し、
-        ->send(new TestMail());//send()メソッドで送信(と送信の内容を記述しているクラスを指定)
+        //同期
+        //Mail::to("abeazpon@gmail.com")//Mail::toメソッドで送信先を指定し、
+        //->send(new TestMail());//send()メソッドで送信(と送信の内容を記述しているクラスを指定)
+
+        //非同期に送信 dispatch='発火'のいみ
+        SendThanksMail::dispatch();
+        //最後にphp artisan queue:work をするとワーカーが起動してキューに溜まっていたジョブたちが処理されてメールとして送信される
+        //普通ならここで常にワーカーを働かせるために「superviser」などを使うが、割愛している
+
 
         //スコープにまとめた
         $products = Product::availableItems()

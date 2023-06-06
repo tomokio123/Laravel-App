@@ -13,6 +13,7 @@ return [
     |
     */
 
+    //.envのエントリポイント的な最初の設定
     'default' => env('QUEUE_CONNECTION', 'sync'),
 
     /*
@@ -34,6 +35,8 @@ return [
             'driver' => 'sync',
         ],
 
+        //.envのQUEUE_CONNECTION=databaseとすることで
+        //キューの保存場所をDBに指定することができる
         'database' => [
             'driver' => 'database',
             'table' => 'jobs',
