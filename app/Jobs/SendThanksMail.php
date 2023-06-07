@@ -10,30 +10,28 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Mail;//メールファサード読み込まないと送信できない
 use App\Mail\TestMail; //TestMailをインポート
+use App\Mail\ThanksMail;
 
 class SendThanksMail implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    /**
-     * Create a new job instance.
-     *
-     * @return void
-     */
-    public function __construct()
+    public $products;
+    public $user;
+
+    //フィールド変数とコンストラクタで引数の初期化をしてあげる事でこのクラスSendThanksMailに値を渡して
+    //、且つこのクラス内(以下のhandleメソッド内)でも使うことができる
+    //constructの中で引数($product, $user)を受け取る
+    public function __construct($products, $user)
     {
-        //
+        $this->products = $products;
+        $this->user = $user;
     }
 
-    /**
-     * Execute the job.
-     *
-     * @return void
-     */
     public function handle()
     {
         //実行する処理(thanks mail送信)
-        Mail::to("abeazpon@gmail.com")//Mail::toメソッドで送信先を指定し、
-        ->send(new TestMail());//send()メソッドで送信(と送信の内容を記述しているクラスを指定)
+        Mail::to($this->user)//$this->userとすることでuserの中のemailの列を探してくれる。
+        ->send(new ThanksMail($this->products, $this->user));//send()メソッドで送信(と送信の内容を記述しているクラスを指定)
     }
 }

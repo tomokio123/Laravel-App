@@ -43,9 +43,8 @@ class ItemController extends Controller
         //同期
         //Mail::to("abeazpon@gmail.com")//Mail::toメソッドで送信先を指定し、
         //->send(new TestMail());//send()メソッドで送信(と送信の内容を記述しているクラスを指定)
-
         //非同期に送信 dispatch='発火'のいみ
-        SendThanksMail::dispatch();
+        //SendThanksMail::dispatch();
         //最後にphp artisan queue:work をするとワーカーが起動してキューに溜まっていたジョブたちが処理されてメールとして送信される
         //普通ならここで常にワーカーを働かせるために「superviser」などを使うが、割愛している
 

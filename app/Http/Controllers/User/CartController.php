@@ -13,6 +13,7 @@ use App\Models\Stock;
 use App\Models\User;
 use App\Services\CartService;
 use Illuminate\Support\Facades\Auth;
+use App\Jobs\SendThanksMail;//ありがとうメール
 
 class CartController extends Controller
 {
@@ -75,7 +76,11 @@ class CartController extends Controller
         ////Cartの中のログインしているユーザの持つカートの商品情報を取得し、
         $items = Cart::where("user_id", Auth::id())->get();//以下のCartServiceのメソッドに渡す
         $products = CartService::getItemsInCart($items);
-        ////
+        $user = User::findOrFail(Auth::id());//Auth::idでログインしているUser情報取得
+
+        SendThanksMail::dispatch($products, $user);//$products情報を渡す
+
+        dd("ユーザ送信メールテスト");
         $user = User::findOrFail(Auth::id());//Auth::idでログインしているUser情報取得
         $products = $user->products;//userに紐づくproductsを取得
 
