@@ -7,6 +7,7 @@ use App\Http\Requests\Auth\LoginRequest;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class AuthenticatedSessionController extends Controller
 {
@@ -31,7 +32,11 @@ class AuthenticatedSessionController extends Controller
     {
         $request->authenticate();
 
+        //requestのsession情報を再発行している
         $request->session()->regenerate();
+
+        //adminとsessionの情報全てをLogでかくにんする
+        Log::debug('admin', $request->session()->all());
 
         return redirect()->intended(RouteServiceProvider::ADMIN_HOME);
     }

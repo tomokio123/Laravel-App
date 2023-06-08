@@ -16,13 +16,19 @@ class AppServiceProvider extends ServiceProvider
         //
     }
 
-    /**
-     * Bootstrap any application services.
-     *
-     * @return void
-     */
+    //ページが読み込まれるたびに自動的に実行されるメソッド:boot()
     public function boot()
     {
-        //
+        //configヘルパ関数->configフォルダ内のファイルが呼べる
+        //(今回はsession.phpのキーである「'cookie_owner'」なので"session.cookie")
+        
+        //ownerから始まるURL
+        if(request()->is("owner*")){
+            config(["session.cookie" => config("session.cookie_owner")]);
+        }
+        //adminから始まるURL
+        if(request()->is("admin*")){
+            config(["session.cookie" => config("session.cookie_admin")]);
+        }
     }
 }
