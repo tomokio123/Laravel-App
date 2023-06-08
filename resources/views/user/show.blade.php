@@ -92,7 +92,8 @@
                               <div class="relative pr-5">
                                 {{--在庫情報をPOST通信でDb保存sする必要があるののでname=quantityとしておく--}}
                                 <select name="quantity" class="rounded border appearance-none border-gray-300 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-200 focus:border-indigo-500 text-base pl-3 pr-10">
-                                  {{--quantityの数だけfor文を回す--}}
+                                  {{--quantityの数だけfor文を回す。在庫が0の183番の商品はこのoptionの中身が空白になる--}}
+                                  {{--考察:quantityがゼロの時に何かアラートを表示するような仕組みもアリだなと思った--}}
                                   @for ($i = 1; $i <= $quantity; $i++)
                                   <option value="{{$i}}">{{$i}}</option>  
                                   @endfor
