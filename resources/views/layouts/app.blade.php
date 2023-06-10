@@ -22,22 +22,24 @@
         <div class="min-h-screen bg-gray-100">
             <!-- Navigationファイルをrouteによって3パターンに分けたのでそのroute分岐処理 -->
             <!-- auth()内に、ガード設定を書ける -->
-            @if(auth('admin')->user()) <!-- adminユーザーだったら -->
+            {{--@if(auth('admin')->user()) <!-- adminユーザーだったら -->
                 @include('layouts.admin-navigation')<!-- layouts/navigation.blade.php を読み込んでいる -->
             @elseif(auth('owners')->user())
                 @include('layouts.owner-navigation')
             @elseif(auth('users')->user())
                 @include('layouts.user-navigation')
-            @endif
-            {{--本当は下記が正しいがちょっと置いておく。lesson76の後半--}}
+            @endif--}}
+
+            {{--本当は下記が正しい。lesson76の後半--}}
+            {{--追記171:原因はadminとownerのクッキーの切り分けができていないと、上記のauthの部分でどちらのクッキーも残った状況になったときに不具合が起こるから。--}}
             {{--上の何がまずいかって、owner画面でnavigationの部分がadminのままでownerにならない。なので「店舗情報」と「Dashboard」のナビゲーションが表示されない--}}
-            {{--@if(request()->is('admin*'))
+            @if(request()->is('admin*'))
                 @include('layouts.admin-navigation')
             @elseif(request()->is('owner*'))
                 @include('layouts.owner-navigation')
             @else
                 @include('layouts.user-navigation')
-            @endif--}}
+            @endif
 
             <!-- Page Heading -->
             <header class="bg-white shadow">
