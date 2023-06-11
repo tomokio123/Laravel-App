@@ -59,5 +59,5 @@ Route::get('/component-test2', [ComponentTestController::class, 'showComponent2'
 Route::get('/servicecontainertest', [LifeCycleTestController::class, 'showServiceContainerTest']);
 Route::get('/serviceprovidertest', [LifeCycleTestController::class, 'showServiceProviderTest']);
 
-require __DIR__.'/auth.php';//__DIR__＝「現在のディレクトリ」ってこと。
+require __DIR__.'/auth.php';//__DIR__＝「現在のディレクトリ」ってこと。つまり「現在のディレクトリにあるauth.php」を呼び出している
 ///auth.php

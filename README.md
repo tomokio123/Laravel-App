@@ -47,3 +47,27 @@ storage/app/public/productsフォルダ内に保存すると表示される。 (
 <script src="{{ asset('js/app.js') }}" defer></script>
 ```
 などと追記する
+
+## laravelのブラウザ表示までの流れ
+1. index.phpを実行する(public/index.php)。ここでオートロードや認証機能サービスコンテナな度も読み込まれる。
+2. ミドルウエアで認証などをチェックする。(ルーティング移動する前にはさむイメージ)
+3. ルーティングを指定し渡す。ここでURL(コントローラとメソッド)を指定し、呼び出す
+4. コントローラ内の処理実行
+### コントローラ内で行う二つの主な処理
+#### ビューに渡す
+- モデルから取得した値をビューに渡す、遷移させる役割
+#### モデルの操作
+- ビューに渡し表示するような値をモデルを経由してDBから取ってくる役割
+
+## 認証機能ファイル
+サービスプロバイダconfig/app.php内のproviders, aliasにAuthと記載
+- `providers`内では
+`Illuminate\Auth\AuthServiceProvider::class,`
+`Illuminate\Auth\Passwords\PasswordResetServiceProvider::class,`
+- `alias`内では
+`'Auth' => Illuminate\Support\Facades\Auth::class,`
+
+などの記述によって印象しているユーザの情報を取得できる
+
+## ルーティング
+-> routes/web.php, routes/auth.php に記載。
