@@ -1,5 +1,5 @@
 ## viewの仕組みについて
-
+ビューのキャッシュクリアコマンド:`php artisan view:clear`
 ### Componentのパターン
 - 一つのコンポーネントを複数ページで使いまわせる、修正しやすい
 - スロットを使って文字の部分だけをページによって出し分けたりできる
@@ -28,3 +28,14 @@ Conponent側で`{{ $slot }}`とすることで呼び出せる(マスタッシュ
   "content" => "content初期値です"
 ])
 ```
+### クラスベース
+### クラスベースを作るコマンド
+`php artisan make:component XXXX`とする事で、app>View>Componets>XXXX.php(コンポーネントを呼ぶクラス)([TestClassBase]のような感じのクラス)が生成される。それと同時に、app>resources>componets>YYYY.blade.php(実際に呼ばれるbladeコンポーネント)も作成される。
+Blade内では`<x-test-class-base>`として使う(呼び出す)。以下にまとめると
+1. 使いたいbladeファイル内でコンポーネントの「クラス」を指定し(`<x-test-class-base>`)、
+2. そのクラス内のrender()メソッド内に書いてあるview()ヘルパ関数が呼び出され、
+3. そのviewに指定してある「クラスベースコンポーネント」が表示される
+という順番で利用できる。初期値設定は以下の順番で可能。
+- app>View>Componets>XXXX.phpに`public $classBaseMessage`のようにフィールド変数を持たせた上で、
+- その下にコンストラクタメソッド`public function __construct()`を設定できる。
+
