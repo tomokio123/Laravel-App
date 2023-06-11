@@ -71,3 +71,6 @@ storage/app/public/productsフォルダ内に保存すると表示される。 (
 
 ## ルーティング
 -> routes/web.php, routes/auth.php に記載。
+
+## エラー表示を日本語化する方法
+-> resources/langに「lang-README.md」を分けて記載した。
