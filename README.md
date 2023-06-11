@@ -74,3 +74,34 @@ storage/app/public/productsフォルダ内に保存すると表示される。 (
 
 ## エラー表示を日本語化する方法
 -> resources/langに「lang-README.md」を分けて記載した。
+
+## tailwindcssとパージ
+-> まずpackage.jsonに依存を指定。(devDependenciesの中にある"tailwindcss","forms"の箇所など)
+#### tailwindcssとパージのファイル
+- tailwindcssはwebpack.mix.js内にあり、Laravel Breezeをインストールした際にimportされるような記載が元からある。
+```
+//swiperを追記
+mix.js('resources/js/app.js', 'public/js').js('resources/js/swiper.js', 'public/js')
+    .postCss('resources/css/app.css', 'public/css', [
+        require("postcss-import"),
+        require("tailwindcss"),
+        require("autoprefixer"),
+    ]);
+```
+- パージはtailwind.config.js内。Laravel Breezeをインストールした際にimportされている。
+元々はpurgeだった。`php artisan serve`(バックエンド側)だけだと反映されないので、`npm run watch`(フロント側)も実行しないといけない。
+```
+content: [
+        './vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php',
+        './storage/framework/views/*.php',
+        './resources/views/**/*.blade.php',
+        './resources/**/*.js',
+        './resources/**/*.vue',
+    ],
+```
+## Bladeコンポーネントやコンポーネントについて
+->コントローラーを肥大化させないために、viewの詳しい描画などの部分をBladeやコンポーネントに任せている。Contorllerはviewを指定するだけで済む
+- `x-コンポーネント名`と書くことで認識される
+
+## コントローラー作成コマンド
+`php artisan male:controller コントローラ名`でapp/Http/Controllers以下に作成される
