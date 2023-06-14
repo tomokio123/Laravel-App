@@ -105,3 +105,59 @@ content: [
 
 ## コントローラー作成コマンド
 `php artisan male:controller コントローラ名`でapp/Http/Controllers以下に作成される
+
+## ヘルパ関数・演算子など
+- `{{ __("aaaa") }}`のように_２本で宣言されているのは多言語ファイルに示されている文字情報("aaaa"の部分)を引用している。(ja.json等)
+- `A ?? B`:値Aがnullであった場合は値Bを適用する
+- `A ? B :C`: 条件Aがtrueなら値Bを適用、falseなら値Cを適用
+
+## Alpine.jsについて
+Breezeをインストールするとpackage.jsonのdevDependenciesの中にalpine.jsがインストールされる。
+- components/dropdown.blade.phpなどに`x-data`とあるのが特徴。
+
+## サービスコンテナ
+#### できること
+1. **依存解決してくれる**
+DIとも呼ばれ、「依存性注入」とも呼ばれる。「インスタンス化するクラス内に他のクラスのインスタンスを使っていた場合、そのクラスも勝手にインスタンス化してくれている」ということになる。
+```
+class ClassA
+{
+    public function __construct(ClassB $classB)
+    {
+        \Log::info('ClassA');
+    }
+}
+class ClassB
+{
+    public function __construct()
+    {
+        \Log::info('ClassB');
+    }
+}
+```
+を普通なら
+```
+$classB = new ClassB();
+$classA = new ClassA($classB);
+```
+とインスタンス化するが、めんどい。しかし`make()`を用いると
+```
+$classA = app()->make(ClassA::class);
+```
+のように一気にクラスAをクラスB以降のインスタンスを省略して実行できる。
+
+2. **インスタンス化の方法をカスタマイズできる**
+`app()->bind('呼び出しキーワード', 'インスタンス化方法・メソッド');`とする事でインスタンス化方法をカスタムできる。
+
+例【ClassX::classを呼び出すとClassYをインスタンス化するようにカスタム】
+```
+// カスタマイズ方法定義
+app()->bind(ClassX::class, function () {
+    return new ClassY();
+});
+
+// 「ClassX::class」キーワードでインスタンス化->ClassYのインスタンス化が完了
+$classX = app()->make(ClassX::class);
+```
+#### サービスコンテナの考察
+Laravelのフレームワーク内で魔法のメソッドが呼ばれているなあ、しかもそれがエラー出てないのはなんでだろう？と持っていたが、多分先祖をどんどん辿っていった時にサービスコンテナにより、そのメソッドがインスタンス化されていることで使用することができているのだと思った。Laravel内でのサービスコンテナの活躍は多いな。謎の呼び出しメソッド(〇〇::class的なやつも)インスタンス化が元々フレームワークによってカスタマイズされているのかと思うとやはりLaravalは楽しているなあとも思う。
